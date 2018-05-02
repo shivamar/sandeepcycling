@@ -31,12 +31,10 @@ class Main extends Component {
     return (
       <View style={{ flex: 1 }}>
         <Mapbox.MapView
-          animated={true}
-          userTrackingMode={Mapbox.UserTrackingModes.Follow}
-          showUserLocation={true}
-          styleURL={Mapbox.StyleURL.Street}
+          animated={true}          
           zoomLevel={12}
           centerCoordinate={[-75.552104,39.756706]}
+          styleURL={Mapbox.StyleURL.Street}
           style={{ flex: 1 }}
         />
       </View>
