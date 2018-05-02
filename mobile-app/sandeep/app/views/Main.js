@@ -1,5 +1,5 @@
 import React, { Component } from 'react'
-import { View, Text, TouchableOpacity } from 'react-native'
+import { View, Text, TouchableOpacity, Animated } from 'react-native'
 import { connect } from 'react-redux'
 import Mapbox from '@mapbox/react-native-mapbox-gl'
 
@@ -10,6 +10,7 @@ Mapbox.setAccessToken(
 import { init } from '../actions/apiRequests'
 
 class Main extends Component {
+  state = { centered: false }
   componentDidMount() {
     console.log('test')
     this.props.init()
@@ -19,16 +20,14 @@ class Main extends Component {
   }
   render() {
     return (
-      <View>
-        <Text>Main View</Text>
-        <TouchableOpacity onPress={this.navigate}>
-          <Text>{this.props.test}</Text>
-        </TouchableOpacity>
+      <View style={{ flex: 1 }}>
         <Mapbox.MapView
+          animated={true}
+          userTrackingMode={Mapbox.UserTrackingModes.Follow}
+          showUserLocation={true}
           styleURL={Mapbox.StyleURL.Street}
-          zoomLevel={15}
-          centerCoordinate={[11.256, 43.77]}
-          style={{ width: '100%', height: 300 }}
+          zoomLevel={20}
+          style={{ flex: 1 }}
         />
       </View>
     )
