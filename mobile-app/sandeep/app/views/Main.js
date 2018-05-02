@@ -39,7 +39,7 @@ class Main extends Component {
     if (!this.state.arcGIS) {
       return null
     }
-    console.log('#################')
+
     return (
       <MapboxGL.ShapeSource id="routeSource" shape={this.state.arcGIS}>
         <MapboxGL.LineLayer id="line" style={layerStyles.lineStyle} />
@@ -47,9 +47,11 @@ class Main extends Component {
     )
   }
 
-  test = async () => {
-    const test = await this._map.getVisibleBounds()
-    console.log(test)
+  onRegionChanged = async () => {
+    const visBounds = await this._map.getVisibleBounds()
+    this.setState({
+      visBounds
+    })
   }
 
   render() {
@@ -63,7 +65,7 @@ class Main extends Component {
           showUserLocation={true}
           centerCoordinate={[-75.552104, 39.756706]}
           onRegionDidChange={() => {
-            this.test()
+            this.onRegionChanged()
           }}
           styleURL={MapboxGL.StyleURL.Street}
           style={{ flex: 1 }}
