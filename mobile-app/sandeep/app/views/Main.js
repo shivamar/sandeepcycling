@@ -1,33 +1,32 @@
-import React, { Component } from "react";
-import { View, Text, TouchableOpacity } from "react-native";
-import { connect } from "react-redux";
-import MapboxGL from "@mapbox/react-native-mapbox-gl";
-import ArcGIS from "../ArcGIS";
+import React, { Component } from 'react'
+import { View, Text, TouchableOpacity } from 'react-native'
+import { connect } from 'react-redux'
+import MapboxGL from '@mapbox/react-native-mapbox-gl'
+import ArcGIS from '../ArcGIS'
 MapboxGL.setAccessToken(
-  "pk.eyJ1IjoiYXdvb2RhbGwiLCJhIjoiY2pnZnJyYjB6MDRqdTMzbzVzbXUzNnowdCJ9.Iv9Ya7fRrQShET_iMEwWMw"
-);
+  'pk.eyJ1IjoiYXdvb2RhbGwiLCJhIjoiY2pnZnJyYjB6MDRqdTMzbzVzbXUzNnowdCJ9.Iv9Ya7fRrQShET_iMEwWMw'
+)
 
 // Import action creators
-import { init, arcGIS } from "../actions/apiRequests";
+import { init, callArcGIS } from '../actions/apiRequests'
 
 class Main extends Component {
-  state = { arcGIS: null };
+  state = { arcGIS: null }
 
   componentDidMount() {
-    console.log("test");
-    this.props.init();
+    this.props.init()
     // call action creator
-    this.props.arcGIS();
+    this.props.callArcGIS()
   }
   componentWillReceiveProps(nextProps) {
     if (nextProps.arcGIS !== null) {
-      this.setState({ arcGIS: nextProps.arcGIS });
+      console.log(nextProps.arcGIS)
+      this.setState({ arcGIS: nextProps.arcGIS })
     }
-    
   }
   navigate = () => {
-    this.props.navigation.navigate("ParkDetail");
-  };
+    this.props.navigation.navigate('ParkDetail')
+  }
   render() {
     return (
       <View style={{ flex: 1 }}>
@@ -44,7 +43,7 @@ class Main extends Component {
           <MapboxGL.LineLayer
             id="line"
             style={{
-              lineColor: "blue",
+              lineColor: 'blue',
               lineWidth: 3,
               lineOpacity: 0.84
             }}
@@ -52,7 +51,7 @@ class Main extends Component {
           />
         </MapboxGL.ShapeSource>
       </View>
-    );
+    )
   }
 }
 
@@ -61,8 +60,8 @@ const mapStateToProps = state => {
   return {
     test: state.test,
     arcGIS: state.arcGIS
-  };
-};
+  }
+}
 
 // connect new action creators to Component
-export default connect(mapStateToProps, { init, arcGIS })(Main);
+export default connect(mapStateToProps, { init, callArcGIS })(Main)
