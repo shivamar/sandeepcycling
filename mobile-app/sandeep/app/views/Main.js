@@ -25,6 +25,7 @@ class Main extends Component {
     this.props.init();
     // call action creator
     this.props.callArcGIS();
+
   }
   componentWillReceiveProps(nextProps) {
     if (nextProps.arcGIS !== null) {
@@ -39,12 +40,18 @@ class Main extends Component {
     if (!this.state.arcGIS) {
       return null;
     }
-    console.log("#################");
+    const visBounds = await this._map.getVisibleBounds();
+
     return (
       <MapboxGL.ShapeSource id="routeSource" shape={this.state.arcGIS}>
         <MapboxGL.LineLayer id="line" style={layerStyles.lineStyle} />
       </MapboxGL.ShapeSource>
     );
+  }
+
+  async onRegionChanged(){
+    const visBounds = await this._map.getVisibleBounds();
+    console.log(":(");
   }
 
   render() {
@@ -57,6 +64,9 @@ class Main extends Component {
           pitchEnabled={false}
           showUserLocation={true}
           centerCoordinate={[-75.552104, 39.756706]}
+          onRegionDidChange={() => {
+            this.onRegionChanged();
+          }}
           styleURL={MapboxGL.StyleURL.Street}
           style={{ flex: 1 }}
         >
