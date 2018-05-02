@@ -1,36 +1,57 @@
-import React, { Component } from 'react'
-import { View, Text, TouchableOpacity } from 'react-native'
-import { connect } from 'react-redux'
-import MapboxGL from '@mapbox/react-native-mapbox-gl'
-import ArcGIS from '../ArcGIS'
+import React, { Component } from "react";
+import { View, Text, TouchableOpacity } from "react-native";
+import { connect } from "react-redux";
+import MapboxGL from "@mapbox/react-native-mapbox-gl";
+import ArcGIS from "../ArcGIS";
 MapboxGL.setAccessToken(
-  'pk.eyJ1IjoiYXdvb2RhbGwiLCJhIjoiY2pnZnJyYjB6MDRqdTMzbzVzbXUzNnowdCJ9.Iv9Ya7fRrQShET_iMEwWMw'
-)
+  "pk.eyJ1IjoiYXdvb2RhbGwiLCJhIjoiY2pnZnJyYjB6MDRqdTMzbzVzbXUzNnowdCJ9.Iv9Ya7fRrQShET_iMEwWMw"
+);
 
 // Import action creators
-import { init, callArcGIS } from '../actions/apiRequests'
+import { init, callArcGIS } from "../actions/apiRequests";
+
+const layerStyles = MapboxGL.StyleSheet.create({
+  lineStyle: {
+    lineColor: "blue",
+    lineWidth: 3,
+    lineOpacity: 0.84
+  }
+});
 
 class Main extends Component {
-  state = { arcGIS: null }
+  state = { arcGIS: null };
 
   componentDidMount() {
-    this.props.init()
+    this.props.init();
     // call action creator
-    this.props.callArcGIS()
+    this.props.callArcGIS();
   }
   componentWillReceiveProps(nextProps) {
     if (nextProps.arcGIS !== null) {
-      console.log(nextProps.arcGIS)
-      this.setState({ arcGIS: nextProps.arcGIS })
+      this.setState({ arcGIS: nextProps.arcGIS });
     }
   }
   navigate = () => {
-    this.props.navigation.navigate('ParkDetail')
+    this.props.navigation.navigate("ParkDetail");
+  };
+
+  renderLines() {
+    if (!this.state.arcGIS) {
+      return null;
+    }
+    console.log("#################");
+    return (
+      <MapboxGL.ShapeSource id="routeSource" shape={this.state.arcGIS}>
+        <MapboxGL.LineLayer id="line" style={layerStyles.lineStyle} />
+      </MapboxGL.ShapeSource>
+    );
   }
+
   render() {
     return (
       <View style={{ flex: 1 }}>
         <MapboxGL.MapView
+          ref={c => (this._map = c)}
           animated={true}
           zoomLevel={12}
           pitchEnabled={false}
@@ -38,20 +59,11 @@ class Main extends Component {
           centerCoordinate={[-75.552104, 39.756706]}
           styleURL={MapboxGL.StyleURL.Street}
           style={{ flex: 1 }}
-        />
-        <MapboxGL.ShapeSource id="routeSource" shape={this.state.arcGIS}>
-          <MapboxGL.LineLayer
-            id="line"
-            style={{
-              lineColor: 'blue',
-              lineWidth: 3,
-              lineOpacity: 0.84
-            }}
-            belowLayerID="originInnerCircle"
-          />
-        </MapboxGL.ShapeSource>
+        >
+          {this.renderLines()}
+        </MapboxGL.MapView>
       </View>
-    )
+    );
   }
 }
 
@@ -60,8 +72,8 @@ const mapStateToProps = state => {
   return {
     test: state.test,
     arcGIS: state.arcGIS
-  }
-}
+  };
+};
 
 // connect new action creators to Component
-export default connect(mapStateToProps, { init, callArcGIS })(Main)
+export default connect(mapStateToProps, { init, callArcGIS })(Main);

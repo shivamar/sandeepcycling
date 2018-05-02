@@ -16,6 +16,7 @@ export const callArcGIS = () => dispatch => {
     'https://firstmap.gis.delaware.gov/arcgis/rest/services/Applications/DE_ParkFinder/MapServer/1/query?where=1%3D1&text=&objectIds=&time=&geometry=&geometryType=esriGeometryEnvelope&inSR=4326&spatialRel=esriSpatialRelIntersects&relationParam=&outFields=*&returnGeometry=true&returnTrueCurves=false&maxAllowableOffset=&geometryPrecision=&outSR=4326&returnIdsOnly=false&returnCountOnly=false&orderByFields=&groupByFieldsForStatistics=&outStatistics=&returnZ=false&returnM=false&gdbVersion=&returnDistinctValues=false&resultOffset=&resultRecordCount=100&f=json'
   )
     .then(response => {
+
       return response.json()
     })
     .then(respJson => {
@@ -32,7 +33,7 @@ export const callArcGIS = () => dispatch => {
     outFields: '*',
     returnGeometry: 'true',
     returnTrueCurves: 'true',
-    outSR: '4326',
+    outSR: '3857',
     returnIdsOnly: 'false',
     returnCountOnly: 'false',
     returnZ: 'false',
