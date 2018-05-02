@@ -26,7 +26,7 @@ class Main extends Component {
           userTrackingMode={Mapbox.UserTrackingModes.Follow}
           showUserLocation={true}
           styleURL={Mapbox.StyleURL.Street}
-          zoomLevel={20}
+          zoomLevel={11}
           style={{ flex: 1 }}
         />
       </View>
