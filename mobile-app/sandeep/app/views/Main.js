@@ -49,9 +49,14 @@ class Main extends Component {
 
   onRegionChanged = async () => {
     const visBounds = await this._map.getVisibleBounds()
-    this.setState({
-      visBounds
-    })
+    this.setState(
+      {
+        visBounds
+      },
+      () => {
+        console.log(this.state.visBounds)
+      }
+    )
   }
 
   render() {
