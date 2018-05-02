@@ -27,8 +27,8 @@ class Main extends Component {
         </TouchableOpacity>
         <Mapbox.MapView
           styleURL={Mapbox.StyleURL.Street}
-          zoomLevel={15}
-          centerCoordinate={[11.256, 43.77]}
+          zoomLevel={12}
+          centerCoordinate={[-75.552104,39.756706]}
           style={{ flex: 1 }}
         />
       </View>
