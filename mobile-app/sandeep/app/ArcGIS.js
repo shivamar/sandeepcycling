@@ -1,20 +1,55 @@
-import {
-  arcgisToGeoJSON,
-  geojsonToArcGIS
-} from "@esri/arcgis-to-geojson-utils";
+import { arcgisToGeoJSON, geojsonToArcGIS } from "@esri/arcgis-to-geojson-utils";
+
+const layers = {
+  facilities: 0,
+  trails: 1,
+  areas: 2,
+  restrictedAreas: 3,
+  seasonalRestrictedAreas: 4,
+  parkAmmenitiesPivot: 5
+};
+
+const queryEndpoint = "https://firstmap.gis.delaware.gov/arcgis/rest/services/Applications/DE_ParkFinder/MapServer/";
 
 const ArcGIS = {
-
-
-  test: () => {
-    fetch(
-      "https://firstmap.gis.delaware.gov/arcgis/rest/services/Applications/DE_ParkFinder/MapServer/1/query?where=1%3D1&text=&objectIds=&time=&geometry=&geometryType=esriGeometryEnvelope&inSR=4326&spatialRel=esriSpatialRelIntersects&relationParam=&outFields=*&returnGeometry=true&returnTrueCurves=false&maxAllowableOffset=&geometryPrecision=&outSR=4326&returnIdsOnly=false&returnCountOnly=false&orderByFields=&groupByFieldsForStatistics=&outStatistics=&returnZ=false&returnM=false&gdbVersion=&returnDistinctValues=false&resultOffset=&resultRecordCount=1&f=json"
-    )
-      .then(response => {
-        return response.json();
+  getFeaturesInBox: () => {},
+  getParkAmmenities: () => {
+    var url = queryEndpoint + layers["parkAmmenitiesPivot"] + "/query?where=1%3D1&outfields=*&f=pjson";
+    ArcGIS.getFeatures(url)
+      .then(resp => {
+        return resp;
       })
-      .then(respJson => {
-        //console.warn(arcgisToGeoJSON(respJson));
+      .catch(err => {
+        return err;
+      });
+  },
+  getFeatures: url => {
+    return ArcGIS.getJson(url)
+      .then(resp => {
+        return arcgisToGeoJSON(resp);
+      })
+      .catch(err => {
+        console.log(err);
+        return err;
+      });
+  },
+  getJson: url => {
+    return fetch(url)
+      .then(resp => {
+        return resp.json();
+      })
+      .catch(err => {
+        console.log(err);
+        return err;
+      });
+  },
+  test: () => {
+    fetch("https://firstmap.gis.delaware.gov/arcgis/rest/services/Applications/DE_ParkFinder/MapServer/1/query?where=1%3D1&text=&objectIds=&time=&geometry=&geometryType=esriGeometryEnvelope&inSR=4326&spatialRel=esriSpatialRelIntersects&relationParam=&outFields=*&returnGeometry=true&returnTrueCurves=false&maxAllowableOffset=&geometryPrecision=&outSR=4326&returnIdsOnly=false&returnCountOnly=false&orderByFields=&groupByFieldsForStatistics=&outStatistics=&returnZ=false&returnM=false&gdbVersion=&returnDistinctValues=false&resultOffset=&resultRecordCount=1&f=json")
+      .then(resp => {
+        return resp.json();
+      })
+      .then(resp => {
+        console.warn(arcgisToGeoJSON(resp));
       });
 
     var requestParams = {
