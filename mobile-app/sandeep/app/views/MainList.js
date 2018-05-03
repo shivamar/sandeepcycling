@@ -20,7 +20,7 @@ class MainList extends Component {
   state = { filterOpen: false }
   constructor(props) {
     super(props)
-    this.filterPos = new Animated.Value(-height + 48)
+    this.filterPos = new Animated.Value(-48)
   }
   toggleFilter = () => {
     this.setState(
@@ -30,16 +30,19 @@ class MainList extends Component {
       () => {
         console.log('test')
         Animated.spring(this.filterPos, {
-          toValue: !this.state.filterOpen ? -height + 48 : -height + 280,
+          toValue: !this.state.filterOpen ? -48 : -280,
           bounciness: 0.75,
-          speed: 16
+          speed: 16,
+          useNativeDriver: true
         }).start()
       }
     )
   }
   render() {
     return (
-      <Animated.View style={[styles.modal, { bottom: this.filterPos }]}>
+      <Animated.View
+        style={[styles.modal, { transform: [{ translateY: this.filterPos }] }]}
+      >
         <FancyHeader
           expanded={!this.state.filterOpen}
           toggleFilter={this.toggleFilter}
@@ -55,7 +58,7 @@ const styles = StyleSheet.create({
     position: 'absolute',
     left: 0,
     right: 0,
-    bottom: -height + 48,
+    top: height,
     width: width,
     height: height,
     zIndex: 10

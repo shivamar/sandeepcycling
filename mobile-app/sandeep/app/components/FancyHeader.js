@@ -11,6 +11,7 @@ import {
 import Icon from 'react-native-vector-icons/MaterialIcons'
 import { connect } from 'react-redux'
 import Tab from './Tab'
+import Pill from './Pill'
 
 const { width, height } = Dimensions.get('window')
 
@@ -46,7 +47,8 @@ class FancyHeader extends Component {
         Animated.spring(this.opacity, {
           toValue: 0,
           bounciness: 0.75,
-          speed: 16
+          speed: 16,
+          useNativeDriver: true
         })
       ]).start()
     } else {
@@ -54,7 +56,8 @@ class FancyHeader extends Component {
         Animated.spring(this.opacity, {
           toValue: 1,
           bounciness: 0.75,
-          speed: 16
+          speed: 16,
+          useNativeDriver: true
         })
       ]).start()
     }
@@ -76,9 +79,9 @@ class FancyHeader extends Component {
       <Animated.View style={[styles.header]}>
         <View style={styles.controls}>
           <Animated.View style={{ opacity: this.opacity }}>
-            <TouchableOpacity>
+            {/* <TouchableOpacity>
               <Text style={styles.button}>LIST VIEW</Text>
-            </TouchableOpacity>
+            </TouchableOpacity> */}
             {/* <TouchableOpacity>
               <Text>BACK ICON</Text>
             </TouchableOpacity> */}
@@ -91,9 +94,9 @@ class FancyHeader extends Component {
             </TouchableOpacity>
           </View>
         </View>
+        <Text style={styles.sublabel}>FEATURES / AMMENITIES</Text>
         <ScrollView horizontal style={{ flex: 1 }}>
           <View style={{ flexDirection: 'column' }}>
-            <Text style={styles.sublabel}>FEATURES / AMMENITIES</Text>
             <View style={styles.slide}>
               {Object.keys(this.state.filters).map((filter, i) => {
                 return (
