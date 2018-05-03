@@ -1,5 +1,5 @@
 import React, { Component } from "react";
-import { View, Text, TouchableOpacity } from "react-native";
+import { View, Text, TouchableOpacity, Dimensions, Keyboard } from "react-native";
 import { connect } from "react-redux";
 import MapboxGL from "@mapbox/react-native-mapbox-gl";
 import ArcGIS from "../ArcGIS";
@@ -7,6 +7,11 @@ MapboxGL.setAccessToken("pk.eyJ1IjoiYXdvb2RhbGwiLCJhIjoiY2pnZnJyYjB6MDRqdTMzbzVz
 
 // Import action creators
 import { init, callArcGIS } from "../actions/apiRequests";
+
+import FloatingSearchBar from '../components/FloatingSearchBar'
+import MainList from './MainList'
+
+const { width, height } = Dimensions.get('window')
 
 const layerStyles = MapboxGL.StyleSheet.create({
   lineStyle: {
@@ -17,9 +22,7 @@ const layerStyles = MapboxGL.StyleSheet.create({
 });
 
 class Main extends Component {
-  state = {
-    arcGIS: null
-  };
+  state = { arcGIS: null, filtersOpen: false }
 
   componentDidMount() {
     this.props.init();
@@ -50,16 +53,17 @@ class Main extends Component {
   }
 
   onRegionChanged = async () => {
-    console.log(":()");
-    const visBounds = await this._map.getVisibleBounds();
-    console.log(visBounds);
-    this.setState({
-      visBounds
-    });
-  };
-  onPress = () => {
-    console.log("TEST");
-  };
+    const visBounds = await this._map.getVisibleBounds()
+    this.setState(
+      {
+        visBounds
+      },
+      () => {
+        console.log(this.state.visBounds)
+      }
+    )
+  }
+
   render() {
     return (
       <View
@@ -68,6 +72,13 @@ class Main extends Component {
         }}
       >
         <MapboxGL.MapView
+          logoEnabled={false}
+          onPress={() => {
+            Keyboard.dismiss
+          }}
+          onRegionWillChange={() => {
+            Keyboard.dismiss
+          }}
           ref={c => (this._map = c)}
           animated={true}
           zoomLevel={12}
@@ -82,6 +93,8 @@ class Main extends Component {
         >
           {this.renderLines()}
         </MapboxGL.MapView>
+        <FloatingSearchBar />
+        <MainList filtersOpen={this.state.filtersOpen} />
       </View>
     );
   }
