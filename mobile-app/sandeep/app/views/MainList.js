@@ -16,11 +16,13 @@ import FancyHeader from '../components/FancyHeader'
 
 const { width, height } = Dimensions.get('window')
 
+const defaultTrayPos = Platform.OS === 'ios' ? -48 : -70
+
 class MainList extends Component {
   state = { filterOpen: false }
   constructor(props) {
     super(props)
-    this.filterPos = new Animated.Value(-height + 48)
+    this.filterPos = new Animated.Value(defaultTrayPos)
   }
   toggleFilter = () => {
     this.setState(
@@ -30,7 +32,7 @@ class MainList extends Component {
       () => {
         console.log('test')
         Animated.spring(this.filterPos, {
-          toValue: !this.state.filterOpen ? -height + 48 : -height + 280,
+          toValue: !this.state.filterOpen ? defaultTrayPos : -280,
           bounciness: 0.75,
           speed: 16
         }).start()
@@ -39,7 +41,9 @@ class MainList extends Component {
   }
   render() {
     return (
-      <Animated.View style={[styles.modal, { bottom: this.filterPos }]}>
+      <Animated.View
+        style={[styles.modal, { transform: [{ translateY: this.filterPos }] }]}
+      >
         <FancyHeader
           expanded={!this.state.filterOpen}
           toggleFilter={this.toggleFilter}
@@ -55,7 +59,7 @@ const styles = StyleSheet.create({
     position: 'absolute',
     left: 0,
     right: 0,
-    bottom: -height + 48,
+    top: height,
     width: width,
     height: height,
     zIndex: 10
