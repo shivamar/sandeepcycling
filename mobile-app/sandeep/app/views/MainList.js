@@ -18,20 +18,28 @@ const { width, height } = Dimensions.get('window')
 
 class MainList extends Component {
   state = { filterOpen: false }
+  constructor(props) {
+    super(props)
+    this.filterPos = new Animated.Value(-height + 48)
+  }
   toggleFilter = () => {
-    console.log('test')
-    this.setState({
-      filterOpen: !this.state.filterOpen
-    })
+    this.setState(
+      {
+        filterOpen: !this.state.filterOpen
+      },
+      () => {
+        console.log('test')
+        Animated.spring(this.filterPos, {
+          toValue: this.state.filterOpen ? -height + 48 : -height + 300,
+          bounciness: 0.75,
+          speed: 50
+        }).start()
+      }
+    )
   }
   render() {
     return (
-      <Animated.View
-        style={[
-          styles.modal,
-          this.state.filterOpen ? { bottom: -height + 380 } : null
-        ]}
-      >
+      <Animated.View style={[styles.modal, { bottom: this.filterPos }]}>
         <FancyHeader toggleFilter={this.toggleFilter} />
       </Animated.View>
     )
