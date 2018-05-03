@@ -4,10 +4,15 @@ import {
   View,
   Text,
   StyleSheet,
-  TouchableOpacity
+  TouchableOpacity,
+  ScrollView,
+  Dimensions
 } from 'react-native'
 import Icon from 'react-native-vector-icons/MaterialIcons'
 import { connect } from 'react-redux'
+import Tab from './Tab'
+
+const { width, height } = Dimensions.get('window')
 
 class FancyHeader extends Component {
   state = { searchTerm: '' }
@@ -61,9 +66,32 @@ class FancyHeader extends Component {
             </TouchableOpacity>
           </View>
         </View>
-        <Animated.View style={{ opacity: this.opacity }}>
-          <Text>test</Text>
-        </Animated.View>
+        <ScrollView
+          horizontal
+          snapToInterval={width}
+          snapToAlignment="center"
+          decelerationRate="fast"
+          style={{ flex: 1 }}
+        >
+          <View style={styles.slide}>
+            <Text style={styles.sublabel}>FEATURES / AMMENTITIES</Text>
+            <View style={styles.tabs}>
+              <Tab label="Label Name" />
+              <Tab label="Label Name" active={true} />
+              <Tab label="Label Name" />
+              <Tab label="Label Name" active={true} />
+            </View>
+          </View>
+          <View style={styles.slide}>
+            <Text style={styles.sublabel}>TRAIL DIFFICULTY</Text>
+            <View style={styles.tabs}>
+              <Tab label="Label Name" />
+              <Tab label="Label Name" active={true} />
+              <Tab label="Label Name" />
+              <Tab label="Label Name" />
+            </View>
+          </View>
+        </ScrollView>
       </Animated.View>
     )
   }
@@ -72,6 +100,23 @@ class FancyHeader extends Component {
 export default connect()(FancyHeader)
 
 const styles = StyleSheet.create({
+  sublabel: {
+    fontSize: 13,
+    color: '#ffffff',
+    fontWeight: '700'
+  },
+  tabs: {
+    flexWrap: 'wrap',
+    alignItems: 'flex-start',
+    flexDirection: 'row',
+    marginTop: 16
+  },
+  slide: {
+    width,
+    paddingLeft: 16,
+    paddingRight: 16,
+    paddingBottom: 16
+  },
   header: {
     backgroundColor: '#4A4A4A',
     height: 280

@@ -96,7 +96,7 @@ class Main extends Component {
           {this.renderLines()}
         </MapboxGL.MapView>
         <FloatingSearchBar />
-        <MainList />
+        <MainList filtersOpen={this.state.filtersOpen} />
       </View>
     )
   }
