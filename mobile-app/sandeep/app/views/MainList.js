@@ -30,9 +30,9 @@ class MainList extends Component {
       () => {
         console.log('test')
         Animated.spring(this.filterPos, {
-          toValue: this.state.filterOpen ? -height + 48 : -height + 300,
+          toValue: !this.state.filterOpen ? -height + 48 : -height + 300,
           bounciness: 0.75,
-          speed: 50
+          speed: 16
         }).start()
       }
     )
@@ -40,7 +40,10 @@ class MainList extends Component {
   render() {
     return (
       <Animated.View style={[styles.modal, { bottom: this.filterPos }]}>
-        <FancyHeader toggleFilter={this.toggleFilter} />
+        <FancyHeader
+          expanded={!this.state.filterOpen}
+          toggleFilter={this.toggleFilter}
+        />
       </Animated.View>
     )
   }

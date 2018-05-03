@@ -11,17 +11,36 @@ import { connect } from 'react-redux'
 
 class FancyHeader extends Component {
   state = { searchTerm: '' }
+  constructor(props) {
+    super(props)
+    this.opacity = new Animated.Value(1)
+  }
 
   clearSearchTerm = () => {
     this.setState({
       searchTerm: ''
     })
   }
+  componentWillReceiveProps(nextProps) {
+    if (!nextProps.expanded) {
+      Animated.spring(this.opacity, {
+        toValue: 0,
+        bounciness: 0.75,
+        speed: 16
+      }).start()
+    } else {
+      Animated.spring(this.opacity, {
+        toValue: 1,
+        bounciness: 0.75,
+        speed: 16
+      }).start()
+    }
+  }
   render() {
     return (
       <View style={styles.header}>
         <View style={styles.controls}>
-          <Animated.View>
+          <Animated.View style={{ opacity: this.opacity }}>
             <TouchableOpacity>
               <Text style={styles.button}>LIST VIEW</Text>
             </TouchableOpacity>
@@ -31,7 +50,9 @@ class FancyHeader extends Component {
           </Animated.View>
           <View>
             <TouchableOpacity onPress={this.props.toggleFilter}>
-              <Text style={styles.button}>FILTERS</Text>
+              <Text style={styles.button}>
+                {!this.props.expanded ? 'DONE' : 'FILTERS'}
+              </Text>
             </TouchableOpacity>
           </View>
         </View>
