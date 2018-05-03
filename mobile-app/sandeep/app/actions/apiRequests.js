@@ -1,5 +1,5 @@
-import { INIT, ARC_GIS } from "./types";
-import ArcGIS from '../ArcGIS'
+import { INIT, ARC_GIS, MAP_UPDATE } from "./types";
+import ArcGIS from "../ArcGIS";
 
 export const init = () => {
   return dispatch => {
@@ -12,19 +12,28 @@ export const init = () => {
 };
 // Redux Thunk
 export const callArcGIS = url => dispatch => {
-
-  ArcGIS.getParkAmmenities();
   ArcGIS.getFeatures(url)
-    .then((respjson) => {
+    .then(respjson => {
       return dispatch({
         type: ARC_GIS,
         payload: respjson
       });
     })
-    .catch((err) => {
+    .catch(err => {
       return dispatch({
         type: ARC_GIS,
         payload: null
       });
     });
 };
+
+export const updateMapBounds = (bounds) => {
+  console.log("action creator bounds:");
+  console.log(bounds)
+  return dispatch => {
+    dispatch({
+      type: MAP_UPDATE,
+      payload: bounds
+    });
+  }
+}

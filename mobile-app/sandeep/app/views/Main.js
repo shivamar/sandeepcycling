@@ -6,12 +6,12 @@ import ArcGIS from "../ArcGIS";
 MapboxGL.setAccessToken("pk.eyJ1IjoiYXdvb2RhbGwiLCJhIjoiY2pnZnJyYjB6MDRqdTMzbzVzbXUzNnowdCJ9.Iv9Ya7fRrQShET_iMEwWMw");
 
 // Import action creators
-import { init, callArcGIS } from "../actions/apiRequests";
+import { init, callArcGIS, updateMapBounds} from "../actions/apiRequests";
 
-import FloatingSearchBar from '../components/FloatingSearchBar'
-import MainList from './MainList'
+import FloatingSearchBar from "../components/FloatingSearchBar";
+import MainList from "./MainList";
 
-const { width, height } = Dimensions.get('window')
+const { width, height } = Dimensions.get("window");
 
 const layerStyles = MapboxGL.StyleSheet.create({
   lineStyle: {
@@ -22,7 +22,7 @@ const layerStyles = MapboxGL.StyleSheet.create({
 });
 
 class Main extends Component {
-  state = { arcGIS: null, filtersOpen: false }
+  state = { arcGIS: null, filtersOpen: false };
 
   componentDidMount() {
     this.props.init();
@@ -35,6 +35,8 @@ class Main extends Component {
         arcGIS: nextProps.arcGIS
       });
     }
+
+
   }
   navigate = () => {
     this.props.navigation.navigate("ParkDetail");
@@ -53,16 +55,9 @@ class Main extends Component {
   }
 
   onRegionChanged = async () => {
-    const visBounds = await this._map.getVisibleBounds()
-    this.setState(
-      {
-        visBounds
-      },
-      () => {
-        console.log(this.state.visBounds)
-      }
-    )
-  }
+    const visBounds = await this._map.getVisibleBounds();
+    this.props.updateMapBounds(visBounds);
+  };
 
   render() {
     return (
@@ -74,10 +69,10 @@ class Main extends Component {
         <MapboxGL.MapView
           logoEnabled={false}
           onPress={() => {
-            Keyboard.dismiss
+            Keyboard.dismiss;
           }}
           onRegionWillChange={() => {
-            Keyboard.dismiss
+            Keyboard.dismiss;
           }}
           ref={c => (this._map = c)}
           animated={true}
@@ -85,7 +80,7 @@ class Main extends Component {
           pitchEnabled={false}
           showUserLocation={true}
           centerCoordinate={[-75.552104, 39.756706]}
-          onPress={this.onPress}
+          onRegionDidChange={this.onRegionChanged}
           styleURL={MapboxGL.StyleURL.Street}
           style={{
             flex: 1
@@ -104,12 +99,14 @@ const mapStateToProps = state => {
   // return properties from global state
   return {
     test: state.test,
-    arcGIS: state.arcGIS
+    arcGIS: state.arcGIS,
+    mapViewBounds: state.updateMapBounds
   };
 };
 
 // connect new action creators to Component
 export default connect(mapStateToProps, {
   init,
-  callArcGIS
+  callArcGIS,
+  updateMapBounds
 })(Main);
