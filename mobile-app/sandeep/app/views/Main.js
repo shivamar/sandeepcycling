@@ -1,5 +1,11 @@
 import React, { Component } from 'react'
-import { View, Text, TouchableOpacity } from 'react-native'
+import {
+  View,
+  Text,
+  TouchableOpacity,
+  Dimensions,
+  Keyboard
+} from 'react-native'
 import { connect } from 'react-redux'
 import MapboxGL from '@mapbox/react-native-mapbox-gl'
 import ArcGIS from '../ArcGIS'
@@ -9,6 +15,11 @@ MapboxGL.setAccessToken(
 
 // Import action creators
 import { init, callArcGIS } from '../actions/apiRequests'
+
+import FloatingSearchBar from '../components/FloatingSearchBar'
+import MainList from './MainList'
+
+const { width, height } = Dimensions.get('window')
 
 const layerStyles = MapboxGL.StyleSheet.create({
   lineStyle: {
@@ -48,7 +59,6 @@ class Main extends Component {
   }
 
   onRegionChanged = async () => {
-    console.log('test')
     const visBounds = await this._map.getVisibleBounds()
     this.setState(
       {
@@ -64,6 +74,9 @@ class Main extends Component {
     return (
       <View style={{ flex: 1 }}>
         <MapboxGL.MapView
+          logoEnabled={false}
+          onPress={Keyboard.dismiss}
+          onRegionWillChange={Keyboard.dismiss}
           ref={c => (this._map = c)}
           animated={true}
           zoomLevel={12}
@@ -78,6 +91,8 @@ class Main extends Component {
         >
           {this.renderLines()}
         </MapboxGL.MapView>
+        <FloatingSearchBar />
+        <MainList />
       </View>
     )
   }
