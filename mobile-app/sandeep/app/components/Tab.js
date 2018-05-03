@@ -4,6 +4,7 @@ import { View, Text, TouchableOpacity } from 'react-native'
 export default props => {
   return (
     <TouchableOpacity
+      onPress={() => props.onPress(props.key)}
       style={[styles.container, props.active ? styles.filled : null]}
     >
       <Text style={[styles.text, props.active ? styles.textfill : null]}>

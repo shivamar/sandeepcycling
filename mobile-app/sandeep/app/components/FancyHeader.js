@@ -76,19 +76,70 @@ class FancyHeader extends Component {
           <View style={styles.slide}>
             <Text style={styles.sublabel}>FEATURES / AMMENTITIES</Text>
             <View style={styles.tabs}>
-              <Tab label="Label Name" />
-              <Tab label="Label Name" active={true} />
-              <Tab label="Label Name" />
-              <Tab label="Label Name" active={true} />
+              <Tab
+                onPress={key => {
+                  console.log(key)
+                }}
+                id="id"
+                label="Label Name"
+              />
+              <Tab
+                onPress={id => {
+                  console.log(id)
+                }}
+                id="id"
+                label="Label Name"
+                active={true}
+              />
+              <Tab
+                onPress={id => {
+                  console.log(id)
+                }}
+                id="id"
+                label="Label Name"
+              />
+              <Tab
+                onPress={id => {
+                  console.log(id)
+                }}
+                id="id"
+                label="Label Name"
+                active={true}
+              />
             </View>
           </View>
           <View style={styles.slide}>
             <Text style={styles.sublabel}>TRAIL DIFFICULTY</Text>
             <View style={styles.tabs}>
-              <Tab label="Label Name" />
-              <Tab label="Label Name" active={true} />
-              <Tab label="Label Name" />
-              <Tab label="Label Name" />
+              <Tab
+                onPress={id => {
+                  console.log(id)
+                }}
+                id="id"
+                label="Label Name"
+              />
+              <Tab
+                onPress={id => {
+                  console.log(id)
+                }}
+                id="id"
+                label="Label Name"
+                active={true}
+              />
+              <Tab
+                onPress={id => {
+                  console.log(id)
+                }}
+                id="id"
+                label="Label Name"
+              />
+              <Tab
+                onPress={id => {
+                  console.log(id)
+                }}
+                id="key"
+                label="Label Name"
+              />
             </View>
           </View>
         </ScrollView>
