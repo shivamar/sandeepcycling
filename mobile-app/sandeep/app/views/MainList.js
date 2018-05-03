@@ -30,9 +30,9 @@ class MainList extends Component {
       () => {
         console.log('test')
         Animated.spring(this.filterPos, {
-          toValue: !this.state.filterOpen ? -height + 48 : -height + 300,
+          toValue: !this.state.filterOpen ? -height + 48 : -height + 280,
           bounciness: 0.75,
-          speed: 16
+          speed: 10
         }).start()
       }
     )

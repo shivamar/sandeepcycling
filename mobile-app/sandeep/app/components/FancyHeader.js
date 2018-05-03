@@ -14,6 +14,7 @@ class FancyHeader extends Component {
   constructor(props) {
     super(props)
     this.opacity = new Animated.Value(1)
+    this.filterOpacity = new Animated.Value(0)
   }
 
   clearSearchTerm = () => {
@@ -23,22 +24,26 @@ class FancyHeader extends Component {
   }
   componentWillReceiveProps(nextProps) {
     if (!nextProps.expanded) {
-      Animated.spring(this.opacity, {
-        toValue: 0,
-        bounciness: 0.75,
-        speed: 16
-      }).start()
+      Animated.parallel([
+        Animated.spring(this.opacity, {
+          toValue: 0,
+          bounciness: 0.75,
+          speed: 16
+        })
+      ]).start()
     } else {
-      Animated.spring(this.opacity, {
-        toValue: 1,
-        bounciness: 0.75,
-        speed: 16
-      }).start()
+      Animated.parallel([
+        Animated.spring(this.opacity, {
+          toValue: 1,
+          bounciness: 0.75,
+          speed: 16
+        })
+      ]).start()
     }
   }
   render() {
     return (
-      <View style={styles.header}>
+      <Animated.View style={[styles.header]}>
         <View style={styles.controls}>
           <Animated.View style={{ opacity: this.opacity }}>
             <TouchableOpacity>
@@ -56,7 +61,10 @@ class FancyHeader extends Component {
             </TouchableOpacity>
           </View>
         </View>
-      </View>
+        <Animated.View style={{ opacity: this.opacity }}>
+          <Text>test</Text>
+        </Animated.View>
+      </Animated.View>
     )
   }
 }
@@ -66,7 +74,7 @@ export default connect()(FancyHeader)
 const styles = StyleSheet.create({
   header: {
     backgroundColor: '#4A4A4A',
-    height: 112
+    height: 280
   },
   button: {
     color: '#ffffff',

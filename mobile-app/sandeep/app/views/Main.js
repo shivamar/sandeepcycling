@@ -30,7 +30,7 @@ const layerStyles = MapboxGL.StyleSheet.create({
 })
 
 class Main extends Component {
-  state = { arcGIS: null }
+  state = { arcGIS: null, filtersOpen: false }
 
   componentDidMount() {
     this.props.init()
@@ -75,8 +75,12 @@ class Main extends Component {
       <View style={{ flex: 1 }}>
         <MapboxGL.MapView
           logoEnabled={false}
-          onPress={Keyboard.dismiss}
-          onRegionWillChange={Keyboard.dismiss}
+          onPress={() => {
+            Keyboard.dismiss
+          }}
+          onRegionWillChange={() => {
+            Keyboard.dismiss
+          }}
           ref={c => (this._map = c)}
           animated={true}
           zoomLevel={12}
