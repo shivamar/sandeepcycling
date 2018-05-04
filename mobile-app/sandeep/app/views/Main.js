@@ -116,7 +116,6 @@ class Main extends Component {
 
   onRegionChanged = async () => {
     const visBounds = await this._map.getVisibleBounds()
-    Keyboard.dismiss();
     this.setState(
       {
         visBounds
