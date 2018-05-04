@@ -2,11 +2,11 @@ import React, { Component } from "react";
 import { View, Text, TouchableOpacity, Dimensions, Animated, StatusBar } from "react-native";
 import { connect } from "react-redux";
 import MapboxGL from "@mapbox/react-native-mapbox-gl";
-import ArcGIS from "../ArcGIS";
+import { ArcGIS } from "../ArcGIS";
 MapboxGL.setAccessToken("pk.eyJ1IjoiYXdvb2RhbGwiLCJhIjoiY2pnZnJyYjB6MDRqdTMzbzVzbXUzNnowdCJ9.Iv9Ya7fRrQShET_iMEwWMw");
 
 // Import action creators
-import { init, getFeaturesInBounds, updateMapBounds } from "../actions/apiRequests";
+import { init, getFeaturesInBounds, getFeaturesWhere, updateMapBounds } from "../actions/apiRequests";
 
 import FloatingSearchBar from "../components/FloatingSearchBar";
 import MainList from "./MainList";
@@ -85,6 +85,10 @@ class Main extends Component {
     );
   }
 
+  onSearch = (searchTerm)=>{
+    //retrieve park shapes for parks with a name similar to what is being searched
+    this.props.getFeaturesWhere("lower(name) LIKE '%" + searchTerm.toLowerCase() + "%'", ArcGIS.layers["areas"])
+  }
   renderAnnotations = () => {
     return DATA.map((d, i) => {
       return (
@@ -110,7 +114,7 @@ class Main extends Component {
 
   onRegionChanged = async () => {
     const visBounds = await this._map.getVisibleBounds();
-    this.props.getFeaturesInBounds(visBounds);
+    //this.props.getFeaturesInBounds(visBounds);
     this.props.updateMapBounds(visBounds);
   };
 
@@ -163,7 +167,7 @@ class Main extends Component {
           {this.renderParks()}
           {this.renderAnnotations()}
         </MapboxGL.MapView>
-        <FloatingSearchBar />
+        <FloatingSearchBar onSubmitted={this.onSearch}/>
         <MainList filtersOpen={this.state.filtersOpen} />
         <Animated.View
           style={{
@@ -196,5 +200,6 @@ const mapStateToProps = state => {
 export default connect(mapStateToProps, {
   init,
   getFeaturesInBounds,
+  getFeaturesWhere,
   updateMapBounds
 })(Main);

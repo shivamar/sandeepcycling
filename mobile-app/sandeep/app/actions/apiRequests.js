@@ -1,5 +1,5 @@
 import { INIT, ARC_GIS, MAP_UPDATE } from "./types";
-import ArcGIS from "../ArcGIS";
+import { ArcGIS } from "../ArcGIS";
 
 export const init = () => {
   return dispatch => {
@@ -12,7 +12,6 @@ export const init = () => {
 };
 // Redux Thunk
 export const getFeaturesInBounds = bounds => dispatch => {
-  console.log("action creator for getFeaturesInBounds");
   ArcGIS.getFeaturesInBounds(bounds)
     .then(respjson => {
       return dispatch({
@@ -27,6 +26,23 @@ export const getFeaturesInBounds = bounds => dispatch => {
       });
     });
 };
+
+export const getFeaturesWhere = (query,layerId) => dispatch => {
+  ArcGIS.queryFeaturesWhere(query,layerId)
+    .then(respjson => {
+      return dispatch({
+        type: ARC_GIS,
+        payload: respjson
+      });
+    })
+    .catch(err => {
+      return dispatch({
+        type: ARC_GIS,
+        payload: null
+      });
+    });
+};
+
 
 export const updateMapBounds = bounds => {
   return dispatch => {
