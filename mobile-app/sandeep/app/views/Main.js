@@ -100,14 +100,14 @@ class Main extends Component {
           coordinate={[d.lat, d.long]}
           onSelected={an => {
             this.setState({ selectedAnnotation: d.id }, () => {
-              setTimeout(() => {
+
                 Animated.spring(this.selectedAnnotation, {
                   toValue: 0.01,
                   bounciness: 0.75,
                   speed: 16,
                   useNativeDriver: true
                 }).start()
-              }, 200)
+
             })
           }}
         />
@@ -117,6 +117,7 @@ class Main extends Component {
 
   onRegionChanged = async () => {
     const visBounds = await this._map.getVisibleBounds()
+    Keyboard.dismiss();
     this.setState(
       {
         visBounds
