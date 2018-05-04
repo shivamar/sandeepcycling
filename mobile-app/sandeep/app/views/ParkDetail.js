@@ -4,12 +4,14 @@ import {
   Text,
   ImageBackground,
   TouchableOpacity,
+  TouchableHighlight,
   StatusBar,
   Animated,
   Platform
 } from 'react-native'
 import { connect } from 'react-redux'
 import Icon from 'react-native-vector-icons/MaterialIcons'
+import { showLocation } from 'react-native-map-link'
 
 const HEADER_MAX_HEIGHT = 400
 const HEADER_MIN_HEIGHT = Platform.OS === 'ios' ? 72 : 82
@@ -33,6 +35,11 @@ class ParkDetail extends Component {
       inputRange: [0, HEADER_SCROLL_DISTANCE],
       outputRange: [0, -HEADER_SCROLL_DISTANCE],
       extrapolate: 'clamp'
+    })
+    const buttonTranslate = this.state.scrollY.interpolate({
+      inputRange: [0, HEADER_SCROLL_DISTANCE],
+      outputRange: [0, -HEADER_SCROLL_DISTANCE],
+      extrapolateRight: 'clamp'
     })
     const imageScale = this.state.scrollY.interpolate({
       inputRange: [-HEADER_MAX_HEIGHT, 0, HEADER_MAX_HEIGHT],
@@ -62,6 +69,33 @@ class ParkDetail extends Component {
           ]}
           source={require('../images/gradient.png')}
         />
+        <Animated.View
+          style={[
+            styles.navigateButton,
+            {
+              transform: [{ translateY: buttonTranslate }]
+            }
+          ]}
+        >
+          <TouchableHighlight
+            underlayColor={'#007FD0'}
+            onPress={() => {
+              showLocation({
+                latitude: 38.8976763,
+                longitude: -77.0387185
+                // sourceLatitude: -8.0870631, // optional
+                // sourceLongitude: -34.8941619, // not optional if sourceLatitude is specified
+                // title: 'The White House', // optional
+                // googleForceLatLon: false, // optionally force GoogleMaps to use the latlon for the query instead of the title
+                // googlePlaceId: 'ChIJGVtI4by3t4kRr51d_Qm_x58' // optionally specify the google-place-id
+                // app: 'uber'  // optionally specify specific app to use
+              })
+            }}
+            style={styles.button}
+          >
+            <Icon name="directions-bike" size={24} color="#ffffff" />
+          </TouchableHighlight>
+        </Animated.View>
         <View style={styles.header}>
           <TouchableOpacity
             style={{ flex: 1 }}
@@ -124,6 +158,29 @@ const styles = {
     justifyContent: 'space-between',
     padding: 16,
     paddingTop: 24
+  },
+  button: {
+    justifyContent: 'center',
+    alignItems: 'center',
+    backgroundColor: '#0197F6',
+    width: 60,
+    height: 60,
+    borderRadius: 30,
+    shadowColor: '#000000',
+    zIndex: 1000,
+    shadowOffset: {
+      width: 0,
+      height: 4
+    },
+    shadowRadius: 4,
+    shadowOpacity: 0.25,
+    elevation: 4
+  },
+  navigateButton: {
+    position: 'absolute',
+    right: 16,
+    top: 370,
+    zIndex: 1000
   }
 }
 
