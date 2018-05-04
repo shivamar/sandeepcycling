@@ -132,9 +132,6 @@ class Main extends Component {
       <View style={{ flex: 1 }}>
         <MapboxGL.MapView
           logoEnabled={false}
-          onPress={() => {
-            Keyboard.dismiss()
-          }}
           onRegionWillChange={() => {
             Keyboard.dismiss()
             if (this.state.selectedAnnotation) {
