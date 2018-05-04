@@ -32,8 +32,9 @@ class ParkDetail extends Component {
       extrapolate: 'clamp'
     })
     const smallTitleOpacity = this.state.scrollY.interpolate({
-      inputRange: [HEADER_SCROLL_DISTANCE / 2, HEADER_SCROLL_DISTANCE],
-      outputRange: [0, 1]
+      inputRange: [HEADER_SCROLL_DISTANCE - 60, HEADER_SCROLL_DISTANCE],
+      outputRange: [0, 1],
+      extrapolate: 'clamp'
     })
     const imageTranslate = this.state.scrollY.interpolate({
       inputRange: [0, HEADER_SCROLL_DISTANCE],
@@ -87,12 +88,6 @@ class ParkDetail extends Component {
               showLocation({
                 latitude: 38.8976763,
                 longitude: -77.0387185
-                // sourceLatitude: -8.0870631, // optional
-                // sourceLongitude: -34.8941619, // not optional if sourceLatitude is specified
-                // title: 'The White House', // optional
-                // googleForceLatLon: false, // optionally force GoogleMaps to use the latlon for the query instead of the title
-                // googlePlaceId: 'ChIJGVtI4by3t4kRr51d_Qm_x58' // optionally specify the google-place-id
-                // app: 'uber'  // optionally specify specific app to use
               })
             }}
             style={styles.button}
@@ -104,11 +99,9 @@ class ParkDetail extends Component {
           <TouchableOpacity onPress={() => this.props.navigation.goBack()}>
             <Icon name="arrow-back" size={32} color="#ffffff" />
           </TouchableOpacity>
-          <Animated.Text
-            style={[styles.smallTitle, { opacity: smallTitleOpacity }]}
-          >
-            First State Heritage Park
-          </Animated.Text>
+          <Animated.View style={{ opacity: smallTitleOpacity }}>
+            <Text style={styles.smallTitle}>First State Heritage Park</Text>
+          </Animated.View>
         </View>
         <Animated.ScrollView
           scrollEventThrottle={6}

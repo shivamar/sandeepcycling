@@ -48,7 +48,8 @@ const styles = {
   title: {
     color: '#000000',
     fontSize: 17,
-    lineHeight: 22
+    lineHeight: 22,
+    fontWeight: '700'
   },
   sub: {
     color: '#8C8C8C',

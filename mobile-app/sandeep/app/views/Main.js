@@ -4,7 +4,8 @@ import {
   Text,
   TouchableOpacity,
   Dimensions,
-  Animated
+  Animated,
+  StatusBar
 } from 'react-native'
 import { connect } from 'react-redux'
 import MapboxGL from '@mapbox/react-native-mapbox-gl'
@@ -99,14 +100,12 @@ class Main extends Component {
           coordinate={[d.lat, d.long]}
           onSelected={an => {
             this.setState({ selectedAnnotation: d.id }, () => {
-
-                Animated.spring(this.selectedAnnotation, {
-                  toValue: 0.01,
-                  bounciness: 0.75,
-                  speed: 16,
-                  useNativeDriver: true
-                }).start()
-
+              Animated.spring(this.selectedAnnotation, {
+                toValue: 0.01,
+                bounciness: 0.75,
+                speed: 16,
+                useNativeDriver: true
+              }).start()
             })
           }}
         />
@@ -129,6 +128,7 @@ class Main extends Component {
   render() {
     return (
       <View style={{ flex: 1 }}>
+        <StatusBar barStyle="dark-content" />
         <MapboxGL.MapView
           logoEnabled={false}
           onRegionWillChange={() => {
