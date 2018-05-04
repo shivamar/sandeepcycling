@@ -1,5 +1,5 @@
 import React, { Component } from "react";
-import { View, Text, TouchableOpacity, Dimensions, Keyboard } from "react-native";
+import { View, Text, TouchableOpacity, Dimensions, Animated, StatusBar } from "react-native";
 import { connect } from "react-redux";
 import MapboxGL from "@mapbox/react-native-mapbox-gl";
 import ArcGIS from "../ArcGIS";
@@ -10,8 +10,36 @@ import { init, getFeaturesInBounds, updateMapBounds } from "../actions/apiReques
 
 import FloatingSearchBar from "../components/FloatingSearchBar";
 import MainList from "./MainList";
+import NavigateCard from "../components/MainNavigateCard";
 
 const { width, height } = Dimensions.get("window");
+
+const DATA = [
+  {
+    lat: -75.43373633,
+    long: 39.31314013,
+    title: "Fake Title 1",
+    id: 1
+  },
+  {
+    lat: -75.69865016,
+    long: 40.33122179,
+    title: "Fake Title 2",
+    id: 2
+  },
+  {
+    lat: -75.68203141,
+    long: 39.51467963,
+    title: "Fake Title 3",
+    id: 3
+  },
+  {
+    lat: -75.520775799,
+    long: 39.80070313081,
+    title: "Fake Title 4",
+    id: 4
+  }
+];
 
 const layerStyles = MapboxGL.StyleSheet.create({
   lineStyle: {
@@ -26,8 +54,11 @@ const layerStyles = MapboxGL.StyleSheet.create({
 });
 
 class Main extends Component {
-  state = { arcGIS: null, filtersOpen: false };
-
+  state = { arcGIS: null, filtersOpen: false, selectedAnnotation: null };
+  constructor(props) {
+    super(props);
+    this.selectedAnnotation = new Animated.Value(92);
+  }
   componentDidMount() {
     this.props.init();
   }
@@ -54,6 +85,35 @@ class Main extends Component {
     );
   }
 
+  renderAnnotations = () => {
+    return DATA.map((d, i) => {
+      return (
+        <MapboxGL.PointAnnotation
+          id={`${d.id}`}
+          key={i}
+          title={d.title}
+          coordinate={[d.lat, d.long]}
+          onSelected={an => {
+            this.setState({ selectedAnnotation: d.id }, () => {
+              Animated.spring(this.selectedAnnotation, {
+                toValue: 0.01,
+                bounciness: 0.75,
+                speed: 16,
+                useNativeDriver: true
+              }).start();
+            });
+          }}
+        />
+      );
+    });
+  };
+
+  onRegionChanged = async () => {
+    const visBounds = await this._map.getVisibleBounds();
+    this.props.getFeaturesInBounds(visBounds);
+    this.props.updateMapBounds(visBounds);
+  };
+
   renderParks() {
     if (!this.state.arcGIS) {
       return null;
@@ -66,12 +126,6 @@ class Main extends Component {
     );
   }
 
-  onRegionChanged = async () => {
-    const visBounds = await this._map.getVisibleBounds();
-    this.props.getFeaturesInBounds(visBounds);
-    this.props.updateMapBounds(visBounds);
-  };
-
   render() {
     return (
       <View
@@ -79,13 +133,20 @@ class Main extends Component {
           flex: 1
         }}
       >
+        <StatusBar barStyle="dark-content" />
         <MapboxGL.MapView
           logoEnabled={false}
-          onPress={() => {
-            Keyboard.dismiss;
-          }}
           onRegionWillChange={() => {
-            Keyboard.dismiss;
+            if (this.state.selectedAnnotation) {
+              this.setState({ selectedAnnotation: null }, () => {
+                Animated.spring(this.selectedAnnotation, {
+                  toValue: 92,
+                  bounciness: 0.75,
+                  speed: 16,
+                  useNativeDriver: true
+                }).start();
+              });
+            }
           }}
           ref={c => (this._map = c)}
           animated={true}
@@ -100,9 +161,23 @@ class Main extends Component {
           }}
         >
           {this.renderParks()}
+          {this.renderAnnotations()}
         </MapboxGL.MapView>
         <FloatingSearchBar />
         <MainList filtersOpen={this.state.filtersOpen} />
+        <Animated.View
+          style={{
+            position: "absolute",
+            left: 0,
+            right: 0,
+            bottom: 0,
+            zIndex: 1000,
+            elevation: 2,
+            transform: [{ translateY: this.selectedAnnotation }]
+          }}
+        >
+          <NavigateCard navigation={this.props.navigation} selectedAnnotation={this.state.selectedAnnotation} />
+        </Animated.View>
       </View>
     );
   }

@@ -28,6 +28,7 @@ class FloatingSearchBar extends Component {
           </View>
           <TextInput
             returnKeyType="search"
+            underlineColorAndroid={'rgba(0,0,0,0)'}
             style={{
               height: 48,
               flex: 1,
