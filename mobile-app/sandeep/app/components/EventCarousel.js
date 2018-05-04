@@ -79,7 +79,7 @@ class EventCarousel extends Component {
             ]}
             renderItem={({ item }) => (
               <View style={styles.row}>
-                <Text style={[styles.eventTitle, { fontWeight: '600' }]}>
+                <Text style={[styles.eventTitle, { fontWeight: '700' }]}>
                   {item.key}
                 </Text>
               </View>
@@ -154,7 +154,9 @@ const styles = StyleSheet.create({
     paddingHorizontal: 16,
     paddingVertical: 8,
     borderColor: '#EBEBEB',
-    borderBottomWidth: StyleSheet.hairlineWidth
+    borderBottomWidth: 1,
+    height: 60,
+    justifyContent: 'center'
   }
 })
 
