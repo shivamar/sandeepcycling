@@ -1,17 +1,9 @@
 import React, { Component } from "react";
-import {
-  View,
-  Text,
-  TouchableOpacity,
-  Dimensions,
-  Keyboard
-} from "react-native";
+import { View, Text, TouchableOpacity, Dimensions, Keyboard } from "react-native";
 import { connect } from "react-redux";
 import MapboxGL from "@mapbox/react-native-mapbox-gl";
 import ArcGIS from "../ArcGIS";
-MapboxGL.setAccessToken(
-  "pk.eyJ1IjoiYXdvb2RhbGwiLCJhIjoiY2pnZnJyYjB6MDRqdTMzbzVzbXUzNnowdCJ9.Iv9Ya7fRrQShET_iMEwWMw"
-);
+MapboxGL.setAccessToken("pk.eyJ1IjoiYXdvb2RhbGwiLCJhIjoiY2pnZnJyYjB6MDRqdTMzbzVzbXUzNnowdCJ9.Iv9Ya7fRrQShET_iMEwWMw");
 
 // Import action creators
 import { init, getFeaturesInBounds, updateMapBounds } from "../actions/apiRequests";
@@ -26,6 +18,10 @@ const layerStyles = MapboxGL.StyleSheet.create({
     lineColor: "blue",
     lineWidth: 3,
     lineOpacity: 0.84
+  },
+  fillStyle: {
+    fillColor: "green",
+    fillOpacity: 0.4
   }
 });
 
@@ -53,7 +49,19 @@ class Main extends Component {
 
     return (
       <MapboxGL.ShapeSource id="routeSource" shape={this.state.arcGIS}>
-        <MapboxGL.LineLayer id="line" style={layerStyles.lineStyle} />
+        <MapboxGL.LineLayer id="fill" style={layerStyles.lineStyle} />
+      </MapboxGL.ShapeSource>
+    );
+  }
+
+  renderParks() {
+    if (!this.state.arcGIS) {
+      return null;
+    }
+
+    return (
+      <MapboxGL.ShapeSource id="routeSource" shape={this.state.arcGIS}>
+        <MapboxGL.FillLayer id="fill" style={layerStyles.fillStyle} />
       </MapboxGL.ShapeSource>
     );
   }
@@ -91,7 +99,7 @@ class Main extends Component {
             flex: 1
           }}
         >
-          {this.renderLines()}
+          {this.renderParks()}
         </MapboxGL.MapView>
         <FloatingSearchBar />
         <MainList filtersOpen={this.state.filtersOpen} />

@@ -1,8 +1,7 @@
-import {
-  arcgisToGeoJSON,
-  geojsonToArcGIS
-} from "@esri/arcgis-to-geojson-utils";
+import { arcgisToGeoJSON, geojsonToArcGIS } from "@esri/arcgis-to-geojson-utils";
+import { Dimensions } from "react-native";
 
+//layer id map for code readability
 const layers = {
   facilities: 0,
   trails: 1,
@@ -12,18 +11,22 @@ const layers = {
   parkAmmenitiesPivot: 5
 };
 
+//spatial reference integer to send in queries
 const spatialReference = 4326;
 
 //this is stored separately because in esri, wkid and latestwkid can be different:
 const esriSpatialRefObj = { wkid: 4326, latestWkid: 4326 };
 
-const queryEndpoint =
-  "https://firstmap.gis.delaware.gov/arcgis/rest/services/Applications/DE_ParkFinder/MapServer/";
+//temporary hard coding of firstmap parkfinder endpoint
+// needs to be eventually replaced with pull from web api to decouple from that particular mapserver
+const queryEndpoint = "https://firstmap.gis.delaware.gov/arcgis/rest/services/Applications/DE_ParkFinder/MapServer/";
 
 const ArcGIS = {
   /*
-   *  getFeaturesInBounds(int bounds)
-   *  bounds - 2d array containing 4 values as such:
+   * Fires off a query for features within a certain bounding box, returns a promise
+   * that eventually resolves to a json object.
+   *
+   *  @param bounds - 2d array containing 4 values as such:
    *    [
    *       [minimumLongitude,minimumlatitude]
    *       [maximumLongitude,maximumLatitude]
@@ -34,7 +37,7 @@ const ArcGIS = {
       f: "json",
       returnGeometry: true,
       spatialRel: "esriSpatialRelIntersects",
-      maxAllowableOffset: 19,
+      maxAllowableOffset: ArcGIS.getMaxAllowableOffsetByScreenSize(bounds),
       geometry: {
         xmin: bounds[0][0],
         ymin: bounds[0][1],
@@ -48,22 +51,34 @@ const ArcGIS = {
       outSR: spatialReference
     };
 
-    var url =
-      queryEndpoint + layers["areas"] + "/query?" + ArcGIS.urlEncodeJson(query);
-    console.log("getFeaturesInBounds query:");
-    console.log(ArcGIS.urlEncodeJson(query));
-    console.log(url);
+    var url = queryEndpoint + layers["areas"] + "/query?" + ArcGIS.urlEncodeJson(query);
+
     return ArcGIS.getFeatures(url)
       .then(resp => {
-        console.log("getFeaturesInBounds resp")
+        console.log("getFeaturesInBounds resp");
         console.log(resp);
         return resp;
       })
       .catch(err => {
-        console.log("getFeaturesInBounds err")
+        console.log("getFeaturesInBounds err");
         console.log(err);
         return err;
       });
+  },
+  /*
+   * Used to generate a "maxAllowableOffset" to use in
+   *   ArcGIS queries to simplify geometry. Returns a float.
+   *
+   *  @param bounds - 2d array containing 4 values as such:
+   *    [
+   *       [minimumLongitude,minimumlatitude]
+   *       [maximumLongitude,maximumLatitude]
+   *    ]
+   */
+  getMaxAllowableOffsetByScreenSize: bounds => {
+    var { height, width } = Dimensions.get("screen");
+    var boundsWidth = Math.abs(bounds[1][0] - bounds[0][0]);
+    return boundsWidth / width / 2;
   },
   urlEncodeJson: obj => {
     return Object.keys(obj)
@@ -77,10 +92,7 @@ const ArcGIS = {
       .join("&");
   },
   getParkAmmenities: () => {
-    var url =
-      queryEndpoint +
-      layers["parkAmmenitiesPivot"] +
-      "/query?where=1%3D1&outfields=*&f=pjson";
+    var url = queryEndpoint + layers["parkAmmenitiesPivot"] + "/query?where=1%3D1&outfields=*&f=pjson";
     return ArcGIS.getFeatures(url)
       .then(resp => {
         return resp;
@@ -114,9 +126,7 @@ const ArcGIS = {
       });
   },
   test: () => {
-    fetch(
-      "https://firstmap.gis.delaware.gov/arcgis/rest/services/Applications/DE_ParkFinder/MapServer/1/query?where=1%3D1&text=&objectIds=&time=&geometry=&geometryType=esriGeometryEnvelope&inSR=4326&spatialRel=esriSpatialRelIntersects&relationParam=&outFields=*&returnGeometry=true&returnTrueCurves=false&maxAllowableOffset=&geometryPrecision=&outSR=4326&returnIdsOnly=false&returnCountOnly=false&orderByFields=&groupByFieldsForStatistics=&outStatistics=&returnZ=false&returnM=false&gdbVersion=&returnDistinctValues=false&resultOffset=&resultRecordCount=1&f=json"
-    )
+    fetch("https://firstmap.gis.delaware.gov/arcgis/rest/services/Applications/DE_ParkFinder/MapServer/1/query?where=1%3D1&text=&objectIds=&time=&geometry=&geometryType=esriGeometryEnvelope&inSR=4326&spatialRel=esriSpatialRelIntersects&relationParam=&outFields=*&returnGeometry=true&returnTrueCurves=false&maxAllowableOffset=&geometryPrecision=&outSR=4326&returnIdsOnly=false&returnCountOnly=false&orderByFields=&groupByFieldsForStatistics=&outStatistics=&returnZ=false&returnM=false&gdbVersion=&returnDistinctValues=false&resultOffset=&resultRecordCount=1&f=json")
       .then(resp => {
         return resp.json();
       })
