@@ -100,13 +100,14 @@ class Main extends Component {
           coordinate={[d.lat, d.long]}
           onSelected={an => {
             this.setState({ selectedAnnotation: d.id }, () => {
-              Animated.spring(this.selectedAnnotation, {
-                toValue: 0,
-                bounciness: 0.75,
-                speed: 16,
-                useNativeDriver: true
-              }).start()
-              console.log('test')
+              setTimeout(() => {
+                Animated.spring(this.selectedAnnotation, {
+                  toValue: 0.01,
+                  bounciness: 0.75,
+                  speed: 16,
+                  useNativeDriver: true
+                }).start()
+              }, 200)
             })
           }}
         />
@@ -166,6 +167,10 @@ class Main extends Component {
         <MainList filtersOpen={this.state.filtersOpen} />
         <Animated.View
           style={{
+            position: 'absolute',
+            left: 0,
+            right: 0,
+            bottom: 0,
             zIndex: 1000,
             elevation: 2,
             transform: [{ translateY: this.selectedAnnotation }]

@@ -6,6 +6,7 @@ import {
   TouchableOpacity
 } from 'react-native'
 import Icon from 'react-native-vector-icons/MaterialIcons'
+import { showLocation } from 'react-native-map-link'
 
 class NavigateCard extends Component {
   render() {
@@ -21,7 +22,21 @@ class NavigateCard extends Component {
             <Text style={styles.sub}>2.45 Miles Away</Text>
           </View>
         </TouchableOpacity>
-        <TouchableOpacity style={styles.button}>
+        <TouchableOpacity
+          onPress={() => {
+            showLocation({
+              latitude: 38.8976763,
+              longitude: -77.0387185
+              // sourceLatitude: -8.0870631, // optional
+              // sourceLongitude: -34.8941619, // not optional if sourceLatitude is specified
+              // title: 'The White House', // optional
+              // googleForceLatLon: false, // optionally force GoogleMaps to use the latlon for the query instead of the title
+              // googlePlaceId: 'ChIJGVtI4by3t4kRr51d_Qm_x58' // optionally specify the google-place-id
+              // app: 'uber'  // optionally specify specific app to use
+            })
+          }}
+          style={styles.button}
+        >
           <Icon name="directions-bike" size={24} color="#ffffff" />
         </TouchableOpacity>
       </View>
@@ -57,16 +72,11 @@ const styles = {
     elevation: 4
   },
   container: {
-    position: 'absolute',
     flexDirection: 'row',
     justifyContent: 'space-between',
     alignItems: 'center',
     padding: 16,
-    left: 0,
-    right: 0,
-    bottom: 0,
     height: 92,
-    zIndex: 100,
     backgroundColor: '#ffffff',
     shadowColor: '#000000',
     shadowOffset: {

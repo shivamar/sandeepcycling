@@ -4198,6 +4198,10 @@ react-native-iphone-x-helper@^1.0.1:
   version "1.0.2"
   resolved "https://registry.yarnpkg.com/react-native-iphone-x-helper/-/react-native-iphone-x-helper-1.0.2.tgz#7dbca530930f7c1ce8633cc8fd13ba94102992e1"
 
+react-native-map-link@^1.1.2:
+  version "1.1.2"
+  resolved "https://registry.yarnpkg.com/react-native-map-link/-/react-native-map-link-1.1.2.tgz#d7a2c0d65174b40694cefd2f124dd983d2be99d7"
+
 react-native-safe-area-view@^0.7.0:
   version "0.7.0"
   resolved "https://registry.yarnpkg.com/react-native-safe-area-view/-/react-native-safe-area-view-0.7.0.tgz#38f5ab9368d6ef9e5d18ab64212938af3ec39421"
