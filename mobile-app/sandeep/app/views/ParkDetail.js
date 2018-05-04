@@ -27,9 +27,13 @@ class ParkDetail extends Component {
   }
   render() {
     const titleOpacity = this.state.scrollY.interpolate({
-      inputRange: [0, HEADER_SCROLL_DISTANCE],
+      inputRange: [0, HEADER_SCROLL_DISTANCE - 60],
       outputRange: [1, 0],
       extrapolate: 'clamp'
+    })
+    const smallTitleOpacity = this.state.scrollY.interpolate({
+      inputRange: [HEADER_SCROLL_DISTANCE / 2, HEADER_SCROLL_DISTANCE],
+      outputRange: [0, 1]
     })
     const imageTranslate = this.state.scrollY.interpolate({
       inputRange: [0, HEADER_SCROLL_DISTANCE],
@@ -97,12 +101,14 @@ class ParkDetail extends Component {
           </TouchableHighlight>
         </Animated.View>
         <View style={styles.header}>
-          <TouchableOpacity
-            style={{ flex: 1 }}
-            onPress={() => this.props.navigation.goBack()}
-          >
+          <TouchableOpacity onPress={() => this.props.navigation.goBack()}>
             <Icon name="arrow-back" size={32} color="#ffffff" />
           </TouchableOpacity>
+          <Animated.Text
+            style={[styles.smallTitle, { opacity: smallTitleOpacity }]}
+          >
+            First State Heritage Park
+          </Animated.Text>
         </View>
         <Animated.ScrollView
           scrollEventThrottle={6}
@@ -149,13 +155,13 @@ const styles = {
     fontSize: 16,
     lineHeight: 18,
     color: '#ffffff',
-    fontWeight: '800'
+    fontWeight: '800',
+    paddingLeft: 24
   },
   header: {
     height: 72,
     flexDirection: 'row',
     alignItems: 'center',
-    justifyContent: 'space-between',
     padding: 16,
     paddingTop: 24
   },
