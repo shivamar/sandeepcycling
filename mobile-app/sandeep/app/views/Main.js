@@ -162,6 +162,8 @@ class Main extends Component {
           {this.renderLines()}
           {this.renderAnnotations()}
         </MapboxGL.MapView>
+        <FloatingSearchBar />
+        <MainList filtersOpen={this.state.filtersOpen} />
         <Animated.View
           style={{
             zIndex: 1000,
@@ -174,8 +176,6 @@ class Main extends Component {
             selectedAnnotation={this.state.selectedAnnotation}
           />
         </Animated.View>
-        <FloatingSearchBar />
-        <MainList filtersOpen={this.state.filtersOpen} />
       </View>
     )
   }
