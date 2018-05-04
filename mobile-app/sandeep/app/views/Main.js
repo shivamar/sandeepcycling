@@ -4,7 +4,6 @@ import {
   Text,
   TouchableOpacity,
   Dimensions,
-  Keyboard,
   Animated
 } from 'react-native'
 import { connect } from 'react-redux'
@@ -133,7 +132,6 @@ class Main extends Component {
         <MapboxGL.MapView
           logoEnabled={false}
           onRegionWillChange={() => {
-            Keyboard.dismiss()
             if (this.state.selectedAnnotation) {
               this.setState({ selectedAnnotation: null }, () => {
                 Animated.spring(this.selectedAnnotation, {
