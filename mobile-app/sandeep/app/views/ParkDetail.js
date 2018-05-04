@@ -13,6 +13,8 @@ import { connect } from 'react-redux'
 import Icon from 'react-native-vector-icons/MaterialIcons'
 import { showLocation } from 'react-native-map-link'
 
+import EventCarousel from '../components/EventCarousel'
+
 const HEADER_MAX_HEIGHT = 400
 const HEADER_MIN_HEIGHT = Platform.OS === 'ios' ? 72 : 82
 const HEADER_SCROLL_DISTANCE = HEADER_MAX_HEIGHT - HEADER_MIN_HEIGHT
@@ -115,7 +117,21 @@ class ParkDetail extends Component {
               First State Heritage Park
             </Animated.Text>
           </View>
-          <View style={{ height: 1000 }} />
+          <View style={styles.wordCloud}>
+            <Text style={styles.tag}>Playground</Text>
+            <Text style={styles.tag}>Accessible</Text>
+            <Text style={styles.tag}>Restrooms</Text>
+            <Text style={styles.tag}>Camping</Text>
+            <Text style={styles.tag}>Canoe Launch</Text>
+            <Text style={styles.tag}>Playground</Text>
+            <Text style={styles.tag}>Accessible</Text>
+            <Text style={styles.tag}>Restrooms</Text>
+            <Text style={styles.tag}>Camping</Text>
+            <Text style={styles.tag}>Canoe Launch</Text>
+          </View>
+          <View>
+            <EventCarousel />
+          </View>
         </Animated.ScrollView>
       </View>
     )
@@ -123,6 +139,19 @@ class ParkDetail extends Component {
 }
 
 const styles = {
+  wordCloud: {
+    flexWrap: 'wrap',
+    alignItems: 'flex-start',
+    flexDirection: 'row',
+    padding: 16,
+    paddingRight: 80
+  },
+  tag: {
+    fontSize: 10,
+    color: '#9B9B9B',
+    paddingRight: 8,
+    paddingBottom: 6
+  },
   imageHeader: {
     width: '100%',
     height: 400,

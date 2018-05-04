@@ -5,10 +5,18 @@ import Icon from 'react-native-vector-icons/MaterialIcons'
 class EventCarousel extends Component {
   render() {
     return (
-      <View>
-        <Text>test</Text>
+      <View style={{ width: '100%', padding: 16 }}>
+        <Text style={styles.title}>Upcoming Events</Text>
       </View>
     )
+  }
+}
+
+const styles = {
+  title: {
+    fontWeight: '800',
+    fontSize: 22,
+    lineHeight: 26
   }
 }
 
