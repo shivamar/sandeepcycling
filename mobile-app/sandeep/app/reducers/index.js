@@ -1,6 +1,9 @@
-import { combineReducers } from 'redux'
 import test from './test'
+import arcGIS from './arcGIS'
+import mapViewBounds from './mapupdate'
 
-export default combineReducers({
-  test
-})
+export default {
+  test,
+  arcGIS,
+  mapViewBounds
+}
