@@ -53,7 +53,7 @@ class ParkDetail extends Component {
       outputRange: [3, 1, 1]
     })
     return (
-      <View style={{ flex: 1 }}>
+      <View style={{ flex: 1, backgroundColor: '#ffffff' }}>
         <StatusBar barStyle="light-content" />
         <Animated.Image
           style={[
