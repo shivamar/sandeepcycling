@@ -11,8 +11,9 @@ export const init = () => {
   };
 };
 // Redux Thunk
-export const callArcGIS = url => dispatch => {
-  ArcGIS.getFeatures(url)
+export const getFeaturesInBounds = bounds => dispatch => {
+  console.log("action creator for getFeaturesInBounds");
+  ArcGIS.getFeaturesInBounds(bounds)
     .then(respjson => {
       return dispatch({
         type: ARC_GIS,
@@ -27,13 +28,11 @@ export const callArcGIS = url => dispatch => {
     });
 };
 
-export const updateMapBounds = (bounds) => {
-  console.log("action creator bounds:");
-  console.log(bounds)
+export const updateMapBounds = bounds => {
   return dispatch => {
     dispatch({
       type: MAP_UPDATE,
       payload: bounds
     });
-  }
-}
+  };
+};

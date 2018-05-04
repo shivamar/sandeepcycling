@@ -1,4 +1,7 @@
-import { arcgisToGeoJSON, geojsonToArcGIS } from "@esri/arcgis-to-geojson-utils";
+import {
+  arcgisToGeoJSON,
+  geojsonToArcGIS
+} from "@esri/arcgis-to-geojson-utils";
 
 const layers = {
   facilities: 0,
@@ -9,13 +12,76 @@ const layers = {
   parkAmmenitiesPivot: 5
 };
 
-const queryEndpoint = "https://firstmap.gis.delaware.gov/arcgis/rest/services/Applications/DE_ParkFinder/MapServer/";
+const spatialReference = 4326;
+
+//this is stored separately because in esri, wkid and latestwkid can be different:
+const esriSpatialRefObj = { wkid: 4326, latestWkid: 4326 };
+
+const queryEndpoint =
+  "https://firstmap.gis.delaware.gov/arcgis/rest/services/Applications/DE_ParkFinder/MapServer/";
 
 const ArcGIS = {
-  getFeaturesInBox: () => {},
+  /*
+   *  getFeaturesInBounds(int bounds)
+   *  bounds - 2d array containing 4 values as such:
+   *    [
+   *       [minimumLongitude,minimumlatitude]
+   *       [maximumLongitude,maximumLatitude]
+   *    ]
+   */
+  getFeaturesInBounds: bounds => {
+    var query = {
+      f: "json",
+      returnGeometry: true,
+      spatialRel: "esriSpatialRelIntersects",
+      maxAllowableOffset: 19,
+      geometry: {
+        xmin: bounds[0][0],
+        ymin: bounds[0][1],
+        xmax: bounds[1][0],
+        ymax: bounds[1][1],
+        spatialReference: esriSpatialRefObj
+      },
+      geometryType: "esriGeometryEnvelope",
+      inSR: spatialReference,
+      outFields: "*",
+      outSR: spatialReference
+    };
+
+    var url =
+      queryEndpoint + layers["areas"] + "/query?" + ArcGIS.urlEncodeJson(query);
+    console.log("getFeaturesInBounds query:");
+    console.log(ArcGIS.urlEncodeJson(query));
+    console.log(url);
+    return ArcGIS.getFeatures(url)
+      .then(resp => {
+        console.log("getFeaturesInBounds resp")
+        console.log(resp);
+        return resp;
+      })
+      .catch(err => {
+        console.log("getFeaturesInBounds err")
+        console.log(err);
+        return err;
+      });
+  },
+  urlEncodeJson: obj => {
+    return Object.keys(obj)
+      .map(key => {
+        var val = obj[key];
+        if (val instanceof Array || val instanceof Object) {
+          val = JSON.stringify(val);
+        }
+        return encodeURIComponent(key) + "=" + encodeURIComponent(val);
+      })
+      .join("&");
+  },
   getParkAmmenities: () => {
-    var url = queryEndpoint + layers["parkAmmenitiesPivot"] + "/query?where=1%3D1&outfields=*&f=pjson";
-    ArcGIS.getFeatures(url)
+    var url =
+      queryEndpoint +
+      layers["parkAmmenitiesPivot"] +
+      "/query?where=1%3D1&outfields=*&f=pjson";
+    return ArcGIS.getFeatures(url)
       .then(resp => {
         return resp;
       })
@@ -26,6 +92,8 @@ const ArcGIS = {
   getFeatures: url => {
     return ArcGIS.getJson(url)
       .then(resp => {
+        console.log("getFeatures");
+        console.log(resp);
         return arcgisToGeoJSON(resp);
       })
       .catch(err => {
@@ -36,6 +104,8 @@ const ArcGIS = {
   getJson: url => {
     return fetch(url)
       .then(resp => {
+        console.log("getJson");
+        console.log(resp);
         return resp.json();
       })
       .catch(err => {
@@ -44,7 +114,9 @@ const ArcGIS = {
       });
   },
   test: () => {
-    fetch("https://firstmap.gis.delaware.gov/arcgis/rest/services/Applications/DE_ParkFinder/MapServer/1/query?where=1%3D1&text=&objectIds=&time=&geometry=&geometryType=esriGeometryEnvelope&inSR=4326&spatialRel=esriSpatialRelIntersects&relationParam=&outFields=*&returnGeometry=true&returnTrueCurves=false&maxAllowableOffset=&geometryPrecision=&outSR=4326&returnIdsOnly=false&returnCountOnly=false&orderByFields=&groupByFieldsForStatistics=&outStatistics=&returnZ=false&returnM=false&gdbVersion=&returnDistinctValues=false&resultOffset=&resultRecordCount=1&f=json")
+    fetch(
+      "https://firstmap.gis.delaware.gov/arcgis/rest/services/Applications/DE_ParkFinder/MapServer/1/query?where=1%3D1&text=&objectIds=&time=&geometry=&geometryType=esriGeometryEnvelope&inSR=4326&spatialRel=esriSpatialRelIntersects&relationParam=&outFields=*&returnGeometry=true&returnTrueCurves=false&maxAllowableOffset=&geometryPrecision=&outSR=4326&returnIdsOnly=false&returnCountOnly=false&orderByFields=&groupByFieldsForStatistics=&outStatistics=&returnZ=false&returnM=false&gdbVersion=&returnDistinctValues=false&resultOffset=&resultRecordCount=1&f=json"
+    )
       .then(resp => {
         return resp.json();
       })

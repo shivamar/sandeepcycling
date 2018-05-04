@@ -1,12 +1,20 @@
 import React, { Component } from "react";
-import { View, Text, TouchableOpacity, Dimensions, Keyboard } from "react-native";
+import {
+  View,
+  Text,
+  TouchableOpacity,
+  Dimensions,
+  Keyboard
+} from "react-native";
 import { connect } from "react-redux";
 import MapboxGL from "@mapbox/react-native-mapbox-gl";
 import ArcGIS from "../ArcGIS";
-MapboxGL.setAccessToken("pk.eyJ1IjoiYXdvb2RhbGwiLCJhIjoiY2pnZnJyYjB6MDRqdTMzbzVzbXUzNnowdCJ9.Iv9Ya7fRrQShET_iMEwWMw");
+MapboxGL.setAccessToken(
+  "pk.eyJ1IjoiYXdvb2RhbGwiLCJhIjoiY2pnZnJyYjB6MDRqdTMzbzVzbXUzNnowdCJ9.Iv9Ya7fRrQShET_iMEwWMw"
+);
 
 // Import action creators
-import { init, callArcGIS, updateMapBounds} from "../actions/apiRequests";
+import { init, getFeaturesInBounds, updateMapBounds } from "../actions/apiRequests";
 
 import FloatingSearchBar from "../components/FloatingSearchBar";
 import MainList from "./MainList";
@@ -26,8 +34,6 @@ class Main extends Component {
 
   componentDidMount() {
     this.props.init();
-    // call action creator
-    this.props.callArcGIS("https://firstmap.gis.delaware.gov/arcgis/rest/services/Applications/DE_ParkFinder/MapServer/1/query?where=1%3D1&text=&objectIds=&time=&geometry=&geometryType=esriGeometryEnvelope&inSR=4326&spatialRel=esriSpatialRelIntersects&relationParam=&outFields=*&returnGeometry=true&returnTrueCurves=false&maxAllowableOffset=&geometryPrecision=&outSR=4326&returnIdsOnly=false&returnCountOnly=false&orderByFields=&groupByFieldsForStatistics=&outStatistics=&returnZ=false&returnM=false&gdbVersion=&returnDistinctValues=false&resultOffset=&resultRecordCount=100&f=json");
   }
   componentWillReceiveProps(nextProps) {
     if (nextProps.arcGIS !== null) {
@@ -35,8 +41,6 @@ class Main extends Component {
         arcGIS: nextProps.arcGIS
       });
     }
-
-
   }
   navigate = () => {
     this.props.navigation.navigate("ParkDetail");
@@ -56,6 +60,7 @@ class Main extends Component {
 
   onRegionChanged = async () => {
     const visBounds = await this._map.getVisibleBounds();
+    this.props.getFeaturesInBounds(visBounds);
     this.props.updateMapBounds(visBounds);
   };
 
@@ -100,13 +105,13 @@ const mapStateToProps = state => {
   return {
     test: state.test,
     arcGIS: state.arcGIS,
-    mapViewBounds: state.updateMapBounds
+    mapViewBounds: state.mapViewBounds
   };
 };
 
 // connect new action creators to Component
 export default connect(mapStateToProps, {
   init,
-  callArcGIS,
+  getFeaturesInBounds,
   updateMapBounds
 })(Main);
