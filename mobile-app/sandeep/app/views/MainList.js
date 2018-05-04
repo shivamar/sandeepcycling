@@ -11,16 +11,17 @@ import {
 } from 'react-native'
 import Icon from 'react-native-vector-icons/MaterialIcons'
 import { connect } from 'react-redux'
+import { getStatusBarHeight } from 'react-native-status-bar-height'
 
 import FancyHeader from '../components/FancyHeader'
 
 const { width, height } = Dimensions.get('window')
-
+const offset = Platform.OS === 'ios' ? -48 : -48 - getStatusBarHeight()
 class MainList extends Component {
   state = { filterOpen: false }
   constructor(props) {
     super(props)
-    this.filterPos = new Animated.Value(-48)
+    this.filterPos = new Animated.Value(offset)
   }
   toggleFilter = () => {
     this.setState(
@@ -30,7 +31,7 @@ class MainList extends Component {
       () => {
         console.log('test')
         Animated.spring(this.filterPos, {
-          toValue: !this.state.filterOpen ? -48 : -280,
+          toValue: !this.state.filterOpen ? offset : -280,
           bounciness: 0.75,
           speed: 16,
           useNativeDriver: true
