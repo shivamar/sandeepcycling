@@ -106,28 +106,6 @@ class Main extends Component {
       ArcGIS.layers['areas']
     )
   }
-  renderAnnotations = () => {
-    return DATA.map((d, i) => {
-      return (
-        <MapboxGL.PointAnnotation
-          id={`${d.id}`}
-          key={i}
-          title={d.title}
-          coordinate={[d.lat, d.long]}
-          onSelected={an => {
-            this.setState({ selectedAnnotation: d.id }, () => {
-              Animated.spring(this.selectedAnnotation, {
-                toValue: 0.01,
-                bounciness: 0.75,
-                speed: 16,
-                useNativeDriver: true
-              }).start()
-            })
-          }}
-        />
-      )
-    })
-  }
 
   onRegionChanged = async () => {
     const visBounds = await this._map.getVisibleBounds()
@@ -140,40 +118,40 @@ class Main extends Component {
       return null
     }
 
-    return this.state.arcGIS.features.map((feature, i) => {
-      let data
-      if (feature.geometry.type === 'MultiPolygon') {
-        data = feature.geometry.coordinates[0][0]
-      } else {
-        data = feature.geometry.coordinates[0]
-      }
-      const coords = this.coordinate(data)
+    // return this.state.arcGIS.features.map((feature, i) => {
+    //   let data
+    //   if (feature.geometry.type === 'MultiPolygon') {
+    //     data = feature.geometry.coordinates[0][0]
+    //   } else {
+    //     data = feature.geometry.coordinates[0]
+    //   }
+    //   const coords = this.coordinate(data)
+    //
+    //   return (
+    //     <MapboxGL.PointAnnotation
+    //       id={`${feature.id}`}
+    //       key={feature.id}
+    //       title={feature.properties.NAME}
+    //       coordinate={[coords.latitude, coords.longitude]}
+    //       onSelected={() => {
+    //         this.setState({ selectedAnnotation: feature }, () => {
+    //           Animated.spring(this.selectedAnnotation, {
+    //             toValue: 0.01,
+    //             bounciness: 0.75,
+    //             speed: 16,
+    //             useNativeDriver: true
+    //           }).start()
+    //         })
+    //       }}
+    //     />
+    //   )
+    // })
 
-      return (
-        <MapboxGL.PointAnnotation
-          id={`${feature.id}`}
-          key={feature.id}
-          title={feature.properties.NAME}
-          coordinate={[coords.latitude, coords.longitude]}
-          onSelected={() => {
-            this.setState({ selectedAnnotation: feature }, () => {
-              Animated.spring(this.selectedAnnotation, {
-                toValue: 0.01,
-                bounciness: 0.75,
-                speed: 16,
-                useNativeDriver: true
-              }).start()
-            })
-          }}
-        />
-      )
-    })
-
-    // return (
-    //   <MapboxGL.ShapeSource id="routeSource" shape={this.state.arcGIS}>
-    //     <MapboxGL.FillLayer id="fill" style={layerStyles.fillStyle} />
-    //   </MapboxGL.ShapeSource>
-    // )
+    return (
+      <MapboxGL.ShapeSource id="routeSource" shape={this.state.arcGIS}>
+        <MapboxGL.FillLayer id="fill" style={layerStyles.fillStyle} />
+      </MapboxGL.ShapeSource>
+    )
   }
 
   coordinate = coordinates => {
@@ -228,7 +206,6 @@ class Main extends Component {
           }}
         >
           {this.renderParks()}
-          {this.renderAnnotations()}
         </MapboxGL.MapView>
         <FloatingSearchBar onSubmitted={this.onSearch} />
         <MainList filtersOpen={this.state.filtersOpen} />
