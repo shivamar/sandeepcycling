@@ -5,6 +5,7 @@
 	};
 	objectVersion = 46;
 	objects = {
+
 /* Begin PBXBuildFile section */
 		00C302E51ABCBA2D00DB3ED1 /* libRCTActionSheet.a in Frameworks */ = {isa = PBXBuildFile; fileRef = 00C302AC1ABCB8CE00DB3ED1 /* libRCTActionSheet.a */; };
 		00C302E71ABCBA2D00DB3ED1 /* libRCTGeolocation.a in Frameworks */ = {isa = PBXBuildFile; fileRef = 00C302BA1ABCB90400DB3ED1 /* libRCTGeolocation.a */; };
@@ -43,7 +44,6 @@
 		5DCC192DD62425142E2BB272 /* libPods-sandeep.a in Frameworks */ = {isa = PBXBuildFile; fileRef = 5470BF41A7B8A6F96C4A6477 /* libPods-sandeep.a */; };
 		5E9157361DD0AC6A00FF2AA8 /* libRCTAnimation.a in Frameworks */ = {isa = PBXBuildFile; fileRef = 5E9157331DD0AC6500FF2AA8 /* libRCTAnimation.a */; };
 		832341BD1AAA6AB300B99B32 /* libRCTText.a in Frameworks */ = {isa = PBXBuildFile; fileRef = 832341B51AAA6A8300B99B32 /* libRCTText.a */; };
-		8B4F19B69DE348C792109959 /* libRNFirebase.a in Frameworks */ = {isa = PBXBuildFile; fileRef = C5DEBBF689E44B24974BB606 /* libRNFirebase.a */; };
 		8EFBC8FD4D264F3AA31CDB90 /* FontAwesome.ttf in Resources */ = {isa = PBXBuildFile; fileRef = 281DC487B2C24416ABC7B03A /* FontAwesome.ttf */; };
 		8F0E465165A84CD495A3F38E /* Octicons.ttf in Resources */ = {isa = PBXBuildFile; fileRef = 0C24EB1D3D574EEC8143F6E4 /* Octicons.ttf */; };
 		ADBDB9381DFEBF1600ED6528 /* libRCTBlob.a in Frameworks */ = {isa = PBXBuildFile; fileRef = ADBDB9271DFEBF0700ED6528 /* libRCTBlob.a */; };
@@ -407,7 +407,6 @@
 				00C302EA1ABCBA2D00DB3ED1 /* libRCTVibration.a in Frameworks */,
 				139FDEF61B0652A700C62182 /* libRCTWebSocket.a in Frameworks */,
 				5DCC192DD62425142E2BB272 /* libPods-sandeep.a in Frameworks */,
-				8B4F19B69DE348C792109959 /* libRNFirebase.a in Frameworks */,
 			);
 			runOnlyForDeploymentPostprocessing = 0;
 		};
