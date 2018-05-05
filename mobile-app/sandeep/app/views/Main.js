@@ -1,4 +1,8 @@
 import React, { Component } from 'react'
+import centroid from '@turf/centroid'
+import { helpers } from '@turf/helpers'
+import combine from '@turf/combine'
+import * as turf from '@turf/turf'
 import {
   View,
   Text,
@@ -117,56 +121,84 @@ class Main extends Component {
     if (!this.state.arcGIS) {
       return null
     }
+    // console.log(this.state.arcGIS.features)
+    var parks = {};
 
-    // return this.state.arcGIS.features.map((feature, i) => {
-    //   let data
-    //   if (feature.geometry.type === 'MultiPolygon') {
-    //     data = feature.geometry.coordinates[0][0]
-    //   } else {
-    //     data = feature.geometry.coordinates[0]
-    //   }
-    //   const coords = this.coordinate(data)
-    //
-    //   return (
-    //     <MapboxGL.PointAnnotation
-    //       id={`${feature.id}`}
-    //       key={feature.id}
-    //       title={feature.properties.NAME}
-    //       coordinate={[coords.latitude, coords.longitude]}
-    //       onSelected={() => {
-    //         this.setState({ selectedAnnotation: feature }, () => {
-    //           Animated.spring(this.selectedAnnotation, {
-    //             toValue: 0.01,
-    //             bounciness: 0.75,
-    //             speed: 16,
-    //             useNativeDriver: true
-    //           }).start()
-    //         })
-    //       }}
-    //     />
-    //   )
-    // })
+    for (var i = 0; i < this.state.arcGIS.features.length; i++){
+      if (!(this.state.arcGIS.features[i].properties['NAME'] in parks)) {
+        parks[this.state.arcGIS.features[i].properties['NAME']] = [this.state.arcGIS.features[i]];
+      }
+      else {
+        parks[this.state.arcGIS.features[i].properties['NAME']].push(this.state.arcGIS.features[i]);
+      }
+    }
+    parksArray = [];
+    for (park in parks) {
+      if (parks[park].length > 1) {
+        var collection = turf.featureCollection(parks[park]);
+        var combined = turf.combine(collection).features[0]
+        parksArray.push(combined);
+      }
+      else {
+        parksArray.push(parks[park][0])
+      }
+    }
 
-    return (
-      <MapboxGL.ShapeSource id="routeSource" shape={this.state.arcGIS}>
-        <MapboxGL.FillLayer id="fill" style={layerStyles.fillStyle} />
-      </MapboxGL.ShapeSource>
-    )
+    console.log('parksArray', parksArray);
+    return parksArray.map((feature, i) => {
+      let data
+      //console.log('parks', parks)
+      if (feature.geometry.type === 'MultiPolygon') {
+        var featureCentroid = turf.centroid(feature)
+        data = featureCentroid.geometry.coordinates
+
+      }
+      else {
+        var featureCentroid = turf.centroid(feature)
+        data = featureCentroid.geometry.coordinates
+      }
+      const coords = this.coordinate(data)
+
+      return (
+        <MapboxGL.PointAnnotation
+          id={`${feature.id}`}
+          key={feature.id}
+          title={feature.properties.NAME}
+          coordinate={[coords.latitude, coords.longitude]}
+          onSelected={() => {
+            this.setState({ selectedAnnotation: feature }, () => {
+              Animated.spring(this.selectedAnnotation, {
+                toValue: 0.01,
+                bounciness: 0.75,
+                speed: 16,
+                useNativeDriver: true
+              }).start()
+            })
+          }}
+        />
+      )
+    })
+
+    // return (
+    //   <MapboxGL.ShapeSource id="routeSource" shape={this.state.arcGIS}>
+    //     <MapboxGL.FillLayer id="fill" style={layerStyles.fillStyle} />
+    //   </MapboxGL.ShapeSource>
+    // )
   }
 
   coordinate = coordinates => {
-    let x = coordinates.map(c => c[0])
-    let y = coordinates.map(c => c[1])
-
-    let minX = Math.min.apply(null, x)
-    let maxX = Math.max.apply(null, x)
-
-    let minY = Math.min.apply(null, y)
-    let maxY = Math.max.apply(null, y)
+    // let x = coordinates.map(c => c[0])
+    // let y = coordinates.map(c => c[1])
+    //
+    // let minX = Math.min.apply(null, x)
+    // let maxX = Math.max.apply(null, x)
+    //
+    // let minY = Math.min.apply(null, y)
+    // let maxY = Math.max.apply(null, y)
 
     return {
-      latitude: (minX + maxX) / 2,
-      longitude: (minY + maxY) / 2
+      latitude: coordinates[0],
+      longitude: coordinates[1]
     }
   }
 
