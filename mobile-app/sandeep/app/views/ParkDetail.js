@@ -15,6 +15,9 @@ import Icon from 'react-native-vector-icons/MaterialIcons'
 import { showLocation } from 'react-native-map-link'
 
 import EventCarousel from '../components/EventCarousel'
+import { ArcGIS } from '../ArcGIS'
+
+import { getFeaturesWhere } from '../actions/apiRequests'
 
 const HEADER_MAX_HEIGHT = 400
 const HEADER_MIN_HEIGHT = Platform.OS === 'ios' ? 72 : 82
@@ -28,6 +31,17 @@ class ParkDetail extends Component {
       refreshing: false,
       park: props.navigation.state.params.park
     }
+  }
+  componentDidMount() {
+    this.props.getFeaturesWhere(
+      `where facilityid=${
+        this.props.navigation.state.params.park.properties.FACILITYID
+      }`,
+      ArcGIS.layers['facilities']
+    )
+  }
+  componentWillReceiveProps(nextProps) {
+    console.log(nextProps)
   }
   render() {
     const titleOpacity = this.state.scrollY.interpolate({
@@ -264,8 +278,8 @@ const styles = {
 
 const mapStateToProps = state => {
   return {
-    test: state.test
+    arcGIS: state.arcGIS
   }
 }
 
-export default connect(mapStateToProps)(ParkDetail)
+export default connect(mapStateToProps, { getFeaturesWhere })(ParkDetail)
