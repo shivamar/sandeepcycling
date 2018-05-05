@@ -5,7 +5,8 @@ import {
   TouchableOpacity,
   Dimensions,
   Animated,
-  StatusBar
+  StatusBar,
+  Platform
 } from 'react-native'
 import { connect } from 'react-redux'
 import MapboxGL from '@mapbox/react-native-mapbox-gl'
@@ -214,39 +215,41 @@ class Main extends Component {
           {this.renderParks()}
         </MapboxGL.MapView>
         <FloatingSearchBar onSubmitted={this.onSearch} />
-        <View>
-          <TouchableOpacity
-            style={{
-              position: 'absolute',
-              right: 16,
-              bottom: 64,
-              borderRadius: 8,
-              backgroundColor: '#ffffff',
-              shadowColor: '#000000',
-              shadowOffset: {
-                width: 0,
-                height: 4
-              },
-              shadowRadius: 4,
-              shadowOpacity: 0.25,
-              elevation: 6,
-              height: 50,
-              width: 50,
-              justifyContent: 'center',
-              alignItems: 'center'
-            }}
-            onPress={() => {
-              navigator.geolocation.getCurrentPosition(data => {
-                this._map.moveTo(
-                  [data.coords.longitude, data.coords.latitude],
-                  200
-                )
-              })
-            }}
-          >
-            <Icon name="my-location" size={24} color="#4A4A4A" />
-          </TouchableOpacity>
-        </View>
+        {Platform.OS === 'ios' ? (
+          <View>
+            <TouchableOpacity
+              style={{
+                position: 'absolute',
+                right: 16,
+                bottom: 64,
+                borderRadius: 8,
+                backgroundColor: '#ffffff',
+                shadowColor: '#000000',
+                shadowOffset: {
+                  width: 0,
+                  height: 4
+                },
+                shadowRadius: 4,
+                shadowOpacity: 0.25,
+                elevation: 6,
+                height: 50,
+                width: 50,
+                justifyContent: 'center',
+                alignItems: 'center'
+              }}
+              onPress={() => {
+                navigator.geolocation.getCurrentPosition(data => {
+                  this._map.moveTo(
+                    [data.coords.longitude, data.coords.latitude],
+                    200
+                  )
+                })
+              }}
+            >
+              <Icon name="my-location" size={24} color="#4A4A4A" />
+            </TouchableOpacity>
+          </View>
+        ) : null}
         <MainList filtersOpen={this.state.filtersOpen} />
         <Animated.View
           style={{
