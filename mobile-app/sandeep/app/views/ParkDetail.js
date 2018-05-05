@@ -28,20 +28,47 @@ class ParkDetail extends Component {
     super(props)
     this.state = {
       scrollY: new Animated.Value(0),
+      features: null,
       refreshing: false,
       park: props.navigation.state.params.park
     }
   }
   componentDidMount() {
-    this.props.getFeaturesWhere(
-      `where facilityid=${
+    ArcGIS.queryFeaturesWhere(
+      `facilityid=${
         this.props.navigation.state.params.park.properties.FACILITYID
       }`,
       ArcGIS.layers['facilities']
-    )
+    ).then(res => {
+      console.log(res)
+      this.setState({ features: res })
+    })
   }
   componentWillReceiveProps(nextProps) {
     console.log(nextProps)
+  }
+  renderFeatures = () => {
+    return (
+      <View style={{ flex: 1 }}>
+        <Text
+          style={[styles.sectionTitle, { paddingTop: 24, paddingBottom: 16 }]}
+        >
+          Park Features / Ammenities
+        </Text>
+        <FlatList
+          style={{ flex: 1 }}
+          showsHorizontalScrollIndicator={false}
+          data={this.state.features.features}
+          renderItem={({ item }) => (
+            <View key={item.properties.OBJECTID_1} style={styles.row}>
+              <Text style={[styles.eventTitle, { fontWeight: '700' }]}>
+                {item.properties.FACILITY}
+              </Text>
+            </View>
+          )}
+        />
+      </View>
+    )
   }
   render() {
     const titleOpacity = this.state.scrollY.interpolate({
@@ -153,35 +180,9 @@ class ParkDetail extends Component {
           <View style={{ paddingTop: 32 }}>
             <EventCarousel location={this.state.park.properties.NAME} />
           </View>
-          <View>
-            <Text
-              style={[
-                styles.sectionTitle,
-                { paddingTop: 24, paddingBottom: 16 }
-              ]}
-            >
-              Park Features / Ammenities
-            </Text>
-            <FlatList
-              style={{ flex: 1 }}
-              showsHorizontalScrollIndicator={false}
-              data={[
-                { key: 'Title 1' },
-                { key: 'Title 2' },
-                { key: 'Title 3' },
-                { key: 'Title 4' },
-                { key: 'Title 5' },
-                { key: 'Title 6' }
-              ]}
-              renderItem={({ item }) => (
-                <View style={styles.row}>
-                  <Text style={[styles.eventTitle, { fontWeight: '700' }]}>
-                    {item.key}
-                  </Text>
-                </View>
-              )}
-            />
-          </View>
+          {this.state.features !== null && this.state.features.features.length
+            ? this.renderFeatures()
+            : null}
         </Animated.ScrollView>
       </View>
     )
