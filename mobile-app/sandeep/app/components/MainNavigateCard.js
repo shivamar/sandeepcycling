@@ -9,7 +9,14 @@ import Icon from 'react-native-vector-icons/MaterialIcons'
 import { showLocation } from 'react-native-map-link'
 
 class NavigateCard extends Component {
+  componentWillReceiveProps(nextProps) {
+    console.log(nextProps.selectedAnnotation)
+  }
   render() {
+    if (this.props.selectedAnnotation === null) {
+      return null
+    }
+    const park = this.props.selectedAnnotation.properties
     return (
       <View style={styles.container}>
         <TouchableOpacity
@@ -18,7 +25,7 @@ class NavigateCard extends Component {
           }}
         >
           <View>
-            <Text style={styles.title}>Washington High State Park</Text>
+            <Text style={styles.title}>{park.NAME}</Text>
             <Text style={styles.sub}>2.45 Miles Away</Text>
           </View>
         </TouchableOpacity>
