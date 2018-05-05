@@ -1,3 +1,8 @@
+/*
+ *  This is a series of utility methods for interfacing ArcGIS Server REST endpoints
+ *  with our MapBox/React-Native front end.
+ */
+
 import { arcgisToGeoJSON, geojsonToArcGIS } from "@esri/arcgis-to-geojson-utils";
 import { Dimensions } from "react-native";
 
@@ -63,6 +68,23 @@ export const ArcGIS = {
       });
   },
   /**
+   * Used to retrieve the JSON object representing an ArcGIS MapServer layer
+   * @param {int} layerId  the integer id of the layer in the rest services
+   *
+   */
+  getLayerInfo: layerId => {
+    var url = queryEndpoint + layerId + "?f=json";
+    return ArcGIS.getJson(url)
+      .then(resp => {
+        return resp;
+      })
+      .catch(err => {
+        console.log("getLayerInfo err");
+        return err;
+      });
+  },
+
+  /**
    * Used to generate a "maxAllowableOffset" to use in
    *   ArcGIS queries to simplify geometry. Returns a float.
    *  @param {Array} bounds - 2d array containing 4 values as such:
@@ -102,16 +124,6 @@ export const ArcGIS = {
       .catch(err => {
         console.log("queryFeaturesWhere err");
         console.log(err);
-        return err;
-      });
-  },
-  getParkAmmenities: () => {
-    var url = queryEndpoint + ArcGIS.layers["parkAmmenitiesPivot"] + "/query?where=1%3D1&outfields=*&f=pjson";
-    return ArcGIS.getGeoJson(url)
-      .then(resp => {
-        return resp;
-      })
-      .catch(err => {
         return err;
       });
   },

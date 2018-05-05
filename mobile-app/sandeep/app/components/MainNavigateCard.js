@@ -1,29 +1,27 @@
-import React, { Component } from 'react'
-import {
-  View,
-  Text,
-  TouchableWithoutFeedback,
-  TouchableOpacity
-} from 'react-native'
-import Icon from 'react-native-vector-icons/MaterialIcons'
-import { showLocation } from 'react-native-map-link'
+/*
+ *
+ */
+import React, { Component } from "react";
+import { View, Text, TouchableWithoutFeedback, TouchableOpacity } from "react-native";
+import Icon from "react-native-vector-icons/MaterialIcons";
+import { showLocation } from "react-native-map-link";
 
 class NavigateCard extends Component {
   componentWillReceiveProps(nextProps) {
-    console.log(nextProps.selectedAnnotation)
+    console.log(nextProps.selectedAnnotation);
   }
   render() {
     if (this.props.selectedAnnotation === null) {
-      return null
+      return null;
     }
-    const park = this.props.selectedAnnotation.properties
+    const park = this.props.selectedAnnotation.properties;
     return (
       <View style={styles.container}>
         <TouchableOpacity
           onPress={() => {
-            this.props.navigation.navigate('ParkDetail', {
+            this.props.navigation.navigate("ParkDetail", {
               park: this.props.selectedAnnotation
-            })
+            });
           }}
         >
           <View>
@@ -42,37 +40,37 @@ class NavigateCard extends Component {
               // googleForceLatLon: false, // optionally force GoogleMaps to use the latlon for the query instead of the title
               // googlePlaceId: 'ChIJGVtI4by3t4kRr51d_Qm_x58' // optionally specify the google-place-id
               // app: 'uber'  // optionally specify specific app to use
-            })
+            });
           }}
           style={styles.button}
         >
           <Icon name="directions-bike" size={24} color="#ffffff" />
         </TouchableOpacity>
       </View>
-    )
+    );
   }
 }
 
 const styles = {
   title: {
-    color: '#000000',
+    color: "#000000",
     fontSize: 17,
     lineHeight: 22,
-    fontWeight: '700'
+    fontWeight: "700"
   },
   sub: {
-    color: '#8C8C8C',
+    color: "#8C8C8C",
     fontSize: 13,
     marginTop: 2
   },
   button: {
-    justifyContent: 'center',
-    alignItems: 'center',
-    backgroundColor: '#0197F6',
+    justifyContent: "center",
+    alignItems: "center",
+    backgroundColor: "#0197F6",
     width: 60,
     height: 60,
     borderRadius: 30,
-    shadowColor: '#000000',
+    shadowColor: "#000000",
     shadowOffset: {
       width: 0,
       height: 4
@@ -82,13 +80,13 @@ const styles = {
     elevation: 4
   },
   container: {
-    flexDirection: 'row',
-    justifyContent: 'space-between',
-    alignItems: 'center',
+    flexDirection: "row",
+    justifyContent: "space-between",
+    alignItems: "center",
     padding: 16,
     height: 92,
-    backgroundColor: '#ffffff',
-    shadowColor: '#000000',
+    backgroundColor: "#ffffff",
+    shadowColor: "#000000",
     shadowOffset: {
       width: 0,
       height: 4
@@ -96,6 +94,6 @@ const styles = {
     shadowRadius: 4,
     shadowOpacity: 0.25
   }
-}
+};
 
-export default NavigateCard
+export default NavigateCard;
