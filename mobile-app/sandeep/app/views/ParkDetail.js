@@ -180,9 +180,22 @@ class ParkDetail extends Component {
           <View style={{ paddingTop: 32 }}>
             <EventCarousel location={this.state.park.properties.NAME} />
           </View>
-          {this.state.features !== null && this.state.features.features.length
-            ? this.renderFeatures()
-            : null}
+          {this.state.features !== null &&
+          this.state.features.features.length ? (
+            this.renderFeatures()
+          ) : (
+            <View
+              style={{
+                flex: 1,
+                justifyContent: 'center',
+                alignItems: 'center'
+              }}
+            >
+              <Text style={{ padding: 16, fontSize: 15, color: '#cccccc' }}>
+                There is no data for this park
+              </Text>
+            </View>
+          )}
         </Animated.ScrollView>
       </View>
     )
