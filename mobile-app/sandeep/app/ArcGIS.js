@@ -63,6 +63,23 @@ export const ArcGIS = {
       });
   },
   /**
+   * Used to retrieve the JSON object representing an ArcGIS MapServer layer
+   * @param {int} layerId  the integer id of the layer in the rest services
+   *
+   */
+  getLayerInfo: layerId => {
+    var url = queryEndpoint + layerId + "?f=json";
+    return ArcGIS.getJson(url)
+      .then(resp => {
+        return resp;
+      })
+      .catch(err => {
+        console.log("getLayerInfo err");
+        return err;
+      });
+  },
+
+  /**
    * Used to generate a "maxAllowableOffset" to use in
    *   ArcGIS queries to simplify geometry. Returns a float.
    *  @param {Array} bounds - 2d array containing 4 values as such:

@@ -1,4 +1,4 @@
-import { INIT, ARC_GIS, MAP_UPDATE } from "./types";
+import { INIT, ARC_GIS, MAP_UPDATE, GET_CATEGORIES } from "./types";
 import { ArcGIS } from "../ArcGIS";
 
 export const init = () => {
@@ -22,6 +22,23 @@ export const getFeaturesInBounds = bounds => dispatch => {
     .catch(err => {
       return dispatch({
         type: ARC_GIS,
+        payload: null
+      });
+    });
+};
+
+export const getFilterCategories = () => dispatch => {
+  ArcGIS.getLayerInfo(ArcGIS.layers["parkAmmenitiesPivot"])
+    .then(respjson => {
+      console.log(respjson);
+      return dispatch({
+        type: GET_CATEGORIES,
+        payload: respjson
+      });
+    })
+    .catch(err => {
+      return dispatch({
+        type: GET_CATEGORIES,
         payload: null
       });
     });
