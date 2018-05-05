@@ -124,7 +124,7 @@ class ParkDetail extends Component {
               {this.state.park.properties.NAME}
             </Animated.Text>
           </View>
-          <View style={styles.wordCloud}>
+          {/* <View style={styles.wordCloud}>
             <Text style={styles.tag}>Playground</Text>
             <Text style={styles.tag}>Accessible</Text>
             <Text style={styles.tag}>Restrooms</Text>
@@ -135,8 +135,8 @@ class ParkDetail extends Component {
             <Text style={styles.tag}>Restrooms</Text>
             <Text style={styles.tag}>Camping</Text>
             <Text style={styles.tag}>Canoe Launch</Text>
-          </View>
-          <View>
+          </View> */}
+          <View style={{ paddingTop: 32 }}>
             <EventCarousel location={this.state.park.properties.NAME} />
           </View>
           <View>
