@@ -1,3 +1,6 @@
+/*
+ * This component creates a horizontal carousel of informational cards for the user to swipe through.
+ */
 import React, { Component } from 'react'
 import { View, FlatList, Text, Dimensions, StyleSheet } from 'react-native'
 import Icon from 'react-native-vector-icons/MaterialIcons'
@@ -8,7 +11,11 @@ const { width } = Dimensions.get('window')
 class EventCarousel extends Component {
   state = { events: null, loading: true }
   componentDidMount() {
+
+    //initiate firebase DB reference
     const ref = firebase.database().ref('/events')
+
+    //query for data about a specific park
     const data = ref
       .orderByChild('Park')
       .equalTo('First State Heritage Park')

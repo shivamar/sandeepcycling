@@ -1,3 +1,8 @@
+/*
+ *  This is a series of utility methods for interfacing ArcGIS Server REST endpoints
+ *  with our MapBox/React-Native front end.
+ */
+
 import { arcgisToGeoJSON, geojsonToArcGIS } from "@esri/arcgis-to-geojson-utils";
 import { Dimensions } from "react-native";
 
@@ -119,16 +124,6 @@ export const ArcGIS = {
       .catch(err => {
         console.log("queryFeaturesWhere err");
         console.log(err);
-        return err;
-      });
-  },
-  getParkAmmenities: () => {
-    var url = queryEndpoint + ArcGIS.layers["parkAmmenitiesPivot"] + "/query?where=1%3D1&outfields=*&f=pjson";
-    return ArcGIS.getGeoJson(url)
-      .then(resp => {
-        return resp;
-      })
-      .catch(err => {
         return err;
       });
   },

@@ -1,3 +1,7 @@
+/*
+ * Search bar for the map, currently queries for parks by partial name match but would
+ * ideally be hooked up to a geocoder and SOLR for live search and better matches.
+ */
 import React, { Component } from "react";
 import { Animated, View, Text, StyleSheet, Platform, TextInput, TouchableOpacity } from "react-native";
 import Icon from "react-native-vector-icons/MaterialIcons";
@@ -15,11 +19,14 @@ class FloatingSearchBar extends Component {
       searchTerm: ""
     });
   };
+
+  //event for parent components to control via onSubmitted callback property
   _onSubmitted() {
     if (isFunction(this.props.onSubmitted)) {
       this.props.onSubmitted(this.state.searchTerm);
     }
   }
+  
   render() {
     return (
       <Animated.View style={styles.bar}>

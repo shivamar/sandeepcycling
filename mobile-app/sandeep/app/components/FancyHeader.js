@@ -1,3 +1,8 @@
+/*
+ *  This component creates an exandable drawer of filters by which to controls
+ *  what parks/features are shown on the map. It pulls from the firstmap servers for informational
+ *  about the parks.
+ */
 import React, { Component } from "react";
 import { Animated, View, Text, StyleSheet, TouchableOpacity, ScrollView, Dimensions } from "react-native";
 import Icon from "react-native-vector-icons/MaterialIcons";
