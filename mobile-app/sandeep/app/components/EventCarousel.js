@@ -10,7 +10,7 @@ class EventCarousel extends Component {
   componentDidMount() {
     const ref = firebase.database().ref('/events')
     const data = ref
-      .orderByChild('Park')
+      .orderByChild('park')
       .equalTo('First State Heritage Park')
       .on('value', snapshot => {
         console.log(snapshot.val())
