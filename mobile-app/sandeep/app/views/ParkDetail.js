@@ -15,9 +15,12 @@ import Icon from 'react-native-vector-icons/MaterialIcons'
 import { showLocation } from 'react-native-map-link'
 
 import EventCarousel from '../components/EventCarousel'
+import { ArcGIS } from '../ArcGIS'
+
+import { getFeaturesWhere } from '../actions/apiRequests'
 
 const HEADER_MAX_HEIGHT = 400
-const HEADER_MIN_HEIGHT = Platform.OS === 'ios' ? 72 : 82
+const HEADER_MIN_HEIGHT = Platform.OS === 'ios' ? 72 : 72
 const HEADER_SCROLL_DISTANCE = HEADER_MAX_HEIGHT - HEADER_MIN_HEIGHT
 
 class ParkDetail extends Component {
@@ -25,8 +28,47 @@ class ParkDetail extends Component {
     super(props)
     this.state = {
       scrollY: new Animated.Value(0),
-      refreshing: false
+      features: null,
+      refreshing: false,
+      park: props.navigation.state.params.park
     }
+  }
+  componentDidMount() {
+    ArcGIS.queryFeaturesWhere(
+      `facilityid=${
+        this.props.navigation.state.params.park.properties.FACILITYID
+      }`,
+      ArcGIS.layers['facilities']
+    ).then(res => {
+      console.log(res)
+      this.setState({ features: res })
+    })
+  }
+  componentWillReceiveProps(nextProps) {
+    console.log(nextProps)
+  }
+  renderFeatures = () => {
+    return (
+      <View style={{ flex: 1 }}>
+        <Text
+          style={[styles.sectionTitle, { paddingTop: 24, paddingBottom: 16 }]}
+        >
+          Park Features / Ammenities
+        </Text>
+        <FlatList
+          style={{ flex: 1 }}
+          showsHorizontalScrollIndicator={false}
+          data={this.state.features.features}
+          renderItem={({ item }) => (
+            <View key={item.properties.OBJECTID_1} style={styles.row}>
+              <Text style={[styles.eventTitle, { fontWeight: '700' }]}>
+                {item.properties.FACILITY}
+              </Text>
+            </View>
+          )}
+        />
+      </View>
+    )
   }
   render() {
     const titleOpacity = this.state.scrollY.interpolate({
@@ -64,8 +106,11 @@ class ParkDetail extends Component {
             }
           ]}
           source={{
-            uri:
-              'https://api.mapbox.com/styles/v1/mapbox/streets-v10/static/-122.337798,37.810550,9.67,0.00,0.00/1000x600@2x?access_token=pk.eyJ1IjoiYXdvb2RhbGwiLCJhIjoiY2pnZnJyYjB6MDRqdTMzbzVzbXUzNnowdCJ9.Iv9Ya7fRrQShET_iMEwWMw'
+            uri: `https://api.mapbox.com/styles/v1/mapbox/streets-v10/static/${
+              this.state.park.lat
+            },${
+              this.state.park.long
+            },16,0.00,0.00/1000x1000@2x?access_token=pk.eyJ1IjoiYXdvb2RhbGwiLCJhIjoiY2pnZnJyYjB6MDRqdTMzbzVzbXUzNnowdCJ9.Iv9Ya7fRrQShET_iMEwWMw`
           }}
         />
         <Animated.Image
@@ -89,8 +134,8 @@ class ParkDetail extends Component {
             underlayColor={'#007FD0'}
             onPress={() => {
               showLocation({
-                latitude: 38.8976763,
-                longitude: -77.0387185
+                latitude: this.state.park.long,
+                longitude: this.state.park.lat
               })
             }}
             style={styles.button}
@@ -103,7 +148,9 @@ class ParkDetail extends Component {
             <Icon name="arrow-back" size={32} color="#ffffff" />
           </TouchableOpacity>
           <Animated.View style={{ opacity: smallTitleOpacity }}>
-            <Text style={styles.smallTitle}>First State Heritage Park</Text>
+            <Text style={styles.smallTitle}>
+              {this.state.park.properties.NAME}
+            </Text>
           </Animated.View>
         </View>
         <Animated.ScrollView
@@ -115,10 +162,10 @@ class ParkDetail extends Component {
         >
           <View style={styles.titleContainer}>
             <Animated.Text style={[styles.title, { opacity: titleOpacity }]}>
-              First State Heritage Park
+              {this.state.park.properties.NAME}
             </Animated.Text>
           </View>
-          <View style={styles.wordCloud}>
+          {/* <View style={styles.wordCloud}>
             <Text style={styles.tag}>Playground</Text>
             <Text style={styles.tag}>Accessible</Text>
             <Text style={styles.tag}>Restrooms</Text>
@@ -129,39 +176,26 @@ class ParkDetail extends Component {
             <Text style={styles.tag}>Restrooms</Text>
             <Text style={styles.tag}>Camping</Text>
             <Text style={styles.tag}>Canoe Launch</Text>
+          </View> */}
+          <View style={{ paddingTop: 32 }}>
+            <EventCarousel location={this.state.park.properties.NAME} />
           </View>
-          <View>
-            <EventCarousel />
-          </View>
-          <View>
-            <Text
-              style={[
-                styles.sectionTitle,
-                { paddingTop: 24, paddingBottom: 16 }
-              ]}
+          {this.state.features !== null &&
+          this.state.features.features.length ? (
+            this.renderFeatures()
+          ) : (
+            <View
+              style={{
+                flex: 1,
+                justifyContent: 'center',
+                alignItems: 'center'
+              }}
             >
-              Park Features / Ammenities
-            </Text>
-            <FlatList
-              style={{ flex: 1 }}
-              showsHorizontalScrollIndicator={false}
-              data={[
-                { key: 'Title 1' },
-                { key: 'Title 2' },
-                { key: 'Title 3' },
-                { key: 'Title 4' },
-                { key: 'Title 5' },
-                { key: 'Title 6' }
-              ]}
-              renderItem={({ item }) => (
-                <View style={styles.row}>
-                  <Text style={[styles.eventTitle, { fontWeight: '700' }]}>
-                    {item.key}
-                  </Text>
-                </View>
-              )}
-            />
-          </View>
+              <Text style={{ padding: 16, fontSize: 15, color: '#cccccc' }}>
+                There is no data for this park
+              </Text>
+            </View>
+          )}
         </Animated.ScrollView>
       </View>
     )
@@ -258,8 +292,8 @@ const styles = {
 
 const mapStateToProps = state => {
   return {
-    test: state.test
+    arcGIS: state.arcGIS
   }
 }
 
-export default connect(mapStateToProps)(ParkDetail)
+export default connect(mapStateToProps, { getFeaturesWhere })(ParkDetail)

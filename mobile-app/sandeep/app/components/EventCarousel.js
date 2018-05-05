@@ -1,7 +1,15 @@
 import React, { Component } from 'react'
-import { View, FlatList, Text, Dimensions, StyleSheet } from 'react-native'
+import {
+  View,
+  FlatList,
+  Text,
+  Dimensions,
+  StyleSheet,
+  ActivityIndicator
+} from 'react-native'
 import Icon from 'react-native-vector-icons/MaterialIcons'
 import * as firebase from 'firebase'
+import moment from 'moment'
 
 const { width } = Dimensions.get('window')
 
@@ -10,10 +18,18 @@ class EventCarousel extends Component {
   componentDidMount() {
     const ref = firebase.database().ref('/events')
     const data = ref
-      .orderByChild('Park')
-      .equalTo('First State Heritage Park')
+      .orderByChild('park')
+      .equalTo(this.props.location)
       .on('value', snapshot => {
-        console.log(snapshot.val())
+        this.setState(
+          {
+            events: snapshot.val(),
+            loading: false
+          },
+          () => {
+            console.log(this.state.events)
+          }
+        )
       })
     // const events = await firebase
     //   .database()
@@ -24,15 +40,15 @@ class EventCarousel extends Component {
     //   .equalTo('First State Heritage Park')
   }
   renderCard = item => {
+    console.log(item)
     return (
       <View style={styles.card}>
         <View>
           <Text style={styles.eventTitle}>
-            Guided Tours of the Old State House
+            {this.state.events[item].programtitle}
           </Text>
           <Text numberOfLines={2} style={styles.desc}>
-            Tour this 1791 building that served as Delaware’s capitol until
-            1933…
+            {this.state.events[item].description}
           </Text>
         </View>
         <View
@@ -44,26 +60,45 @@ class EventCarousel extends Component {
           }}
         >
           <View>
-            <Text style={styles.tags}>TOUR, HIST</Text>
+            <Text style={styles.tags}>{this.state.events[item].category}</Text>
             <View style={styles.details}>
               <View style={styles.info}>
                 <Icon name="date-range" size={18} color="#4A4A4A" />
-                <Text style={styles.det}>JUN 18 – JUN 21</Text>
+                <Text style={styles.det}>
+                  {moment(this.state.events[item].start_date).format('MMM DD')}
+                  – {moment(this.state.events[item].end_date).format('MMM DD')}
+                </Text>
               </View>
-              <View style={[styles.info, { paddingLeft: 16 }]}>
-                <Icon name="access-time" size={18} color="#4A4A4A" />
-                <Text style={styles.det}>7:30 AM</Text>
-              </View>
+              {this.state.events[item].start_time !== 'NULL' ? (
+                <View style={[styles.info, { paddingLeft: 16 }]}>
+                  <Icon name="access-time" size={18} color="#4A4A4A" />
+                  <Text style={styles.det}>
+                    {this.state.events[item].start_time}
+                  </Text>
+                </View>
+              ) : null}
             </View>
           </View>
           <View>
-            <Text style={styles.price}>$128</Text>
+            <Text style={styles.price}>{this.state.events[item].cost}</Text>
           </View>
         </View>
       </View>
     )
   }
   render() {
+    if (this.state.loading) {
+      return (
+        <View
+          style={{ flex: 1, justifyContent: 'center', alignItems: 'center' }}
+        >
+          <ActivityIndicator />
+        </View>
+      )
+    }
+    if (!this.state.loading && this.state.events === null) {
+      return null
+    }
     return (
       <View style={{ flex: 1 }}>
         <Text style={styles.title}>Upcoming Events</Text>
@@ -76,8 +111,8 @@ class EventCarousel extends Component {
           }}
           showsHorizontalScrollIndicator={false}
           horizontal
-          data={[{ key: 'a' }, { key: 'b' }, { key: 'c' }]}
-          renderItem={({ item }) => this.renderCard()}
+          data={Object.keys(this.state.events)}
+          renderItem={({ item }) => this.renderCard(item)}
         />
       </View>
     )

@@ -7,7 +7,8 @@ import {
   Platform,
   TextInput,
   TouchableOpacity,
-  Dimensions
+  Dimensions,
+  TouchableWithoutFeedback
 } from 'react-native'
 import Icon from 'react-native-vector-icons/MaterialIcons'
 import { connect } from 'react-redux'

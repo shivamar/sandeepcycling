@@ -6,7 +6,8 @@ import {
   StyleSheet,
   TouchableOpacity,
   ScrollView,
-  Dimensions
+  Dimensions,
+  TouchableWithoutFeedback
 } from 'react-native'
 import Icon from 'react-native-vector-icons/MaterialIcons'
 import { connect } from 'react-redux'
@@ -78,21 +79,14 @@ class FancyHeader extends Component {
     return (
       <Animated.View style={[styles.header]}>
         <View style={styles.controls}>
-          <Animated.View style={{ opacity: this.opacity }}>
-            {/* <TouchableOpacity>
-              <Text style={styles.button}>LIST VIEW</Text>
-            </TouchableOpacity> */}
-            {/* <TouchableOpacity>
-              <Text>BACK ICON</Text>
-            </TouchableOpacity> */}
-          </Animated.View>
-          <View>
-            <TouchableOpacity onPress={this.props.toggleFilter}>
-              <Text style={styles.button}>
-                {!this.props.expanded ? 'DONE' : 'FILTERS'}
-              </Text>
-            </TouchableOpacity>
-          </View>
+          <TouchableOpacity
+            style={{ width: '100%', alignItems: 'flex-end' }}
+            onPress={this.props.toggleFilter}
+          >
+            <Text style={styles.button}>
+              {!this.props.expanded ? 'DONE' : 'FILTERS'}
+            </Text>
+          </TouchableOpacity>
         </View>
         <Text style={styles.sublabel}>FEATURES / AMMENITIES</Text>
         <ScrollView horizontal style={{ flex: 1 }}>
