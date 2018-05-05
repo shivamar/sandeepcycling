@@ -1,9 +1,9 @@
-import { ARC_GIS } from '../actions/types'
+import { MAP_UPDATE } from '../actions/types'
 
 export default (state = null, action) => {
   switch (action.type) {
 
-    case ARC_GIS:
+    case MAP_UPDATE:
       return action.payload
     default:
       return state
