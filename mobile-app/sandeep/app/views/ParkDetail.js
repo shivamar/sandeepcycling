@@ -25,7 +25,8 @@ class ParkDetail extends Component {
     super(props)
     this.state = {
       scrollY: new Animated.Value(0),
-      refreshing: false
+      refreshing: false,
+      park: props.navigation.state.params.park
     }
   }
   render() {
@@ -64,8 +65,11 @@ class ParkDetail extends Component {
             }
           ]}
           source={{
-            uri:
-              'https://api.mapbox.com/styles/v1/mapbox/streets-v10/static/-122.337798,37.810550,9.67,0.00,0.00/1000x600@2x?access_token=pk.eyJ1IjoiYXdvb2RhbGwiLCJhIjoiY2pnZnJyYjB6MDRqdTMzbzVzbXUzNnowdCJ9.Iv9Ya7fRrQShET_iMEwWMw'
+            uri: `https://api.mapbox.com/styles/v1/mapbox/streets-v10/static/${
+              this.state.park.lat
+            },${
+              this.state.park.long
+            },15,0.00,0.00/1000x1000@2x?access_token=pk.eyJ1IjoiYXdvb2RhbGwiLCJhIjoiY2pnZnJyYjB6MDRqdTMzbzVzbXUzNnowdCJ9.Iv9Ya7fRrQShET_iMEwWMw`
           }}
         />
         <Animated.Image
@@ -89,8 +93,8 @@ class ParkDetail extends Component {
             underlayColor={'#007FD0'}
             onPress={() => {
               showLocation({
-                latitude: 38.8976763,
-                longitude: -77.0387185
+                latitude: this.state.park.long,
+                longitude: this.state.park.lat
               })
             }}
             style={styles.button}
@@ -103,7 +107,9 @@ class ParkDetail extends Component {
             <Icon name="arrow-back" size={32} color="#ffffff" />
           </TouchableOpacity>
           <Animated.View style={{ opacity: smallTitleOpacity }}>
-            <Text style={styles.smallTitle}>First State Heritage Park</Text>
+            <Text style={styles.smallTitle}>
+              {this.state.park.properties.NAME}
+            </Text>
           </Animated.View>
         </View>
         <Animated.ScrollView
@@ -115,7 +121,7 @@ class ParkDetail extends Component {
         >
           <View style={styles.titleContainer}>
             <Animated.Text style={[styles.title, { opacity: titleOpacity }]}>
-              First State Heritage Park
+              {this.state.park.properties.NAME}
             </Animated.Text>
           </View>
           <View style={styles.wordCloud}>
@@ -131,7 +137,7 @@ class ParkDetail extends Component {
             <Text style={styles.tag}>Canoe Launch</Text>
           </View>
           <View>
-            <EventCarousel />
+            <EventCarousel location={this.state.park.properties.NAME} />
           </View>
           <View>
             <Text

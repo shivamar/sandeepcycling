@@ -21,7 +21,9 @@ class NavigateCard extends Component {
       <View style={styles.container}>
         <TouchableOpacity
           onPress={() => {
-            this.props.navigation.navigate('ParkDetail')
+            this.props.navigation.navigate('ParkDetail', {
+              park: this.props.selectedAnnotation
+            })
           }}
         >
           <View>
@@ -32,8 +34,8 @@ class NavigateCard extends Component {
         <TouchableOpacity
           onPress={() => {
             showLocation({
-              latitude: 38.8976763,
-              longitude: -77.0387185
+              latitude: this.props.selectedAnnotation.long,
+              longitude: this.props.selectedAnnotation.lat
               // sourceLatitude: -8.0870631, // optional
               // sourceLongitude: -34.8941619, // not optional if sourceLatitude is specified
               // title: 'The White House', // optional

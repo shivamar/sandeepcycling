@@ -110,7 +110,7 @@ class Main extends Component {
 
   onRegionChanged = async () => {
     const visBounds = await this._map.getVisibleBounds()
-    //this.props.getFeaturesInBounds(visBounds);
+    this.props.getFeaturesInBounds(visBounds)
     this.props.updateMapBounds(visBounds)
   }
 
@@ -119,40 +119,46 @@ class Main extends Component {
       return null
     }
 
-    // return this.state.arcGIS.features.map((feature, i) => {
-    //   let data
-    //   if (feature.geometry.type === 'MultiPolygon') {
-    //     data = feature.geometry.coordinates[0][0]
-    //   } else {
-    //     data = feature.geometry.coordinates[0]
-    //   }
-    //   const coords = this.coordinate(data)
-    //
-    //   return (
-    //     <MapboxGL.PointAnnotation
-    //       id={`${feature.id}`}
-    //       key={feature.id}
-    //       title={feature.properties.NAME}
-    //       coordinate={[coords.latitude, coords.longitude]}
-    //       onSelected={() => {
-    //         this.setState({ selectedAnnotation: feature }, () => {
-    //           Animated.spring(this.selectedAnnotation, {
-    //             toValue: 0.01,
-    //             bounciness: 0.75,
-    //             speed: 16,
-    //             useNativeDriver: true
-    //           }).start()
-    //         })
-    //       }}
-    //     />
-    //   )
-    // })
+    return this.state.arcGIS.features.map((feature, i) => {
+      if (!feature.properties.NAME.toLowerCase().includes('park')) {
+        return
+      }
+      let data
+      if (feature.geometry.type === 'MultiPolygon') {
+        data = feature.geometry.coordinates[0][0]
+      } else {
+        data = feature.geometry.coordinates[0]
+      }
+      const coords = this.coordinate(data)
 
-    return (
-      <MapboxGL.ShapeSource id="routeSource" shape={this.state.arcGIS}>
-        <MapboxGL.FillLayer id="fill" style={layerStyles.fillStyle} />
-      </MapboxGL.ShapeSource>
-    )
+      return (
+        <MapboxGL.PointAnnotation
+          id={`${feature.id}`}
+          key={feature.id}
+          title={feature.properties.NAME}
+          coordinate={[coords.latitude, coords.longitude]}
+          onSelected={() => {
+            let obj = feature
+            obj.long = coords.longitude
+            obj.lat = coords.latitude
+            this.setState({ selectedAnnotation: obj }, () => {
+              Animated.spring(this.selectedAnnotation, {
+                toValue: 0.01,
+                bounciness: 0.75,
+                speed: 16,
+                useNativeDriver: true
+              }).start()
+            })
+          }}
+        />
+      )
+    })
+
+    // return (
+    //   <MapboxGL.ShapeSource id="routeSource" shape={this.state.arcGIS}>
+    //     <MapboxGL.FillLayer id="fill" style={layerStyles.fillStyle} />
+    //   </MapboxGL.ShapeSource>
+    // )
   }
 
   coordinate = coordinates => {
