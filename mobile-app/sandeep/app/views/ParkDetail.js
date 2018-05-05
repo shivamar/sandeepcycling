@@ -7,7 +7,8 @@ import {
   TouchableHighlight,
   StatusBar,
   Animated,
-  Platform
+  Platform,
+  FlatList
 } from 'react-native'
 import { connect } from 'react-redux'
 import Icon from 'react-native-vector-icons/MaterialIcons'
@@ -132,6 +133,35 @@ class ParkDetail extends Component {
           <View>
             <EventCarousel />
           </View>
+          <View>
+            <Text
+              style={[
+                styles.sectionTitle,
+                { paddingTop: 24, paddingBottom: 16 }
+              ]}
+            >
+              Park Features / Ammenities
+            </Text>
+            <FlatList
+              style={{ flex: 1 }}
+              showsHorizontalScrollIndicator={false}
+              data={[
+                { key: 'Title 1' },
+                { key: 'Title 2' },
+                { key: 'Title 3' },
+                { key: 'Title 4' },
+                { key: 'Title 5' },
+                { key: 'Title 6' }
+              ]}
+              renderItem={({ item }) => (
+                <View style={styles.row}>
+                  <Text style={[styles.eventTitle, { fontWeight: '700' }]}>
+                    {item.key}
+                  </Text>
+                </View>
+              )}
+            />
+          </View>
         </Animated.ScrollView>
       </View>
     )
@@ -173,6 +203,12 @@ const styles = {
     color: '#ffffff',
     fontWeight: '800'
   },
+  sectionTitle: {
+    fontWeight: '800',
+    fontSize: 22,
+    lineHeight: 26,
+    paddingHorizontal: 16
+  },
   smallTitle: {
     fontSize: 16,
     lineHeight: 18,
@@ -209,6 +245,14 @@ const styles = {
     right: 16,
     top: 370,
     zIndex: 1000
+  },
+  row: {
+    paddingHorizontal: 16,
+    paddingVertical: 8,
+    borderColor: '#EBEBEB',
+    borderBottomWidth: 1,
+    height: 60,
+    justifyContent: 'center'
   }
 }
 

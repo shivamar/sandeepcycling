@@ -50,42 +50,16 @@ class EventCarousel extends Component {
       <View style={{ flex: 1 }}>
         <Text style={styles.title}>Upcoming Events</Text>
         <FlatList
-          style={{ flex: 1, height: 202 }}
+          style={{ flex: 1, height: 218 }}
           contentContainerStyle={{
-            paddingTop: 16,
-            paddingLeft: 8,
-            paddingRight: 8,
-            paddingBottom: 24
+            justifyContent: 'center',
+            alignItems: 'center'
           }}
           showsHorizontalScrollIndicator={false}
           horizontal
-          data={[{ key: 'a' }, { key: 'b' }, { key: 'b' }]}
+          data={[{ key: 'a' }, { key: 'b' }, { key: 'c' }]}
           renderItem={({ item }) => this.renderCard()}
         />
-        <View>
-          <Text style={[styles.title, { paddingTop: 32, paddingBottom: 24 }]}>
-            Park Features / Ammenities
-          </Text>
-          <FlatList
-            style={{ flex: 1 }}
-            showsHorizontalScrollIndicator={false}
-            data={[
-              { key: 'Title 1' },
-              { key: 'Title 2' },
-              { key: 'Title 3' },
-              { key: 'Title 1' },
-              { key: 'Title 2' },
-              { key: 'Title 3' }
-            ]}
-            renderItem={({ item }) => (
-              <View style={styles.row}>
-                <Text style={[styles.eventTitle, { fontWeight: '700' }]}>
-                  {item.key}
-                </Text>
-              </View>
-            )}
-          />
-        </View>
       </View>
     )
   }
@@ -149,14 +123,6 @@ const styles = StyleSheet.create({
     lineHeight: 24,
     color: '#6BCC00',
     fontWeight: '700'
-  },
-  row: {
-    paddingHorizontal: 16,
-    paddingVertical: 8,
-    borderColor: '#EBEBEB',
-    borderBottomWidth: 1,
-    height: 60,
-    justifyContent: 'center'
   }
 })
 
