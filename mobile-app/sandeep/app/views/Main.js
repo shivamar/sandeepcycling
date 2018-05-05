@@ -137,20 +137,73 @@ class Main extends Component {
           id={`${feature.id}`}
           key={feature.id}
           coordinate={[coords.latitude, coords.longitude]}
-          onSelected={() => {
-            let obj = feature
-            obj.long = coords.longitude
-            obj.lat = coords.latitude
-            this.setState({ selectedAnnotation: obj }, () => {
-              Animated.spring(this.selectedAnnotation, {
-                toValue: 0.01,
-                bounciness: 0.75,
-                speed: 16,
-                useNativeDriver: true
-              }).start()
-            })
-          }}
-        />
+        >
+          <TouchableOpacity
+            onPress={() => {
+              let obj = feature
+              obj.long = coords.longitude
+              obj.lat = coords.latitude
+              this.setState({ selectedAnnotation: obj }, () => {
+                Animated.spring(this.selectedAnnotation, {
+                  toValue: 0.01,
+                  bounciness: 0.75,
+                  speed: 16,
+                  useNativeDriver: true
+                }).start()
+              })
+            }}
+          >
+            <View>
+              <View
+                style={{
+                  width: 13,
+                  height: 13,
+                  backgroundColor: 'rgba(0,0,0,0.15)',
+                  position: 'absolute',
+                  bottom: -4,
+                  left: 13,
+                  borderRadius: 7.5,
+                  transform: [{ rotateX: '55deg' }]
+                }}
+              />
+              <Icon
+                style={{
+                  shadowRadius: 1,
+                  textShadowOffset: { width: 0, height: 1 },
+                  shadowColor: '#D81E5B',
+                  shadowOpacity: 0.5
+                }}
+                name="place"
+                size={40}
+                color="#EE4E8B"
+              />
+              <View
+                style={{
+                  backgroundColor: '#ffffff',
+                  width: 12,
+                  height: 12,
+                  borderRadius: 6,
+                  position: 'absolute',
+                  top: 9,
+                  left: 14,
+                  shadowColor: '#D81E5B',
+                  shadowOpacity: 1,
+                  shadowRadius: 3,
+                  // iOS
+                  shadowOffset: {
+                    width: 0, // These can't both be 0
+                    height: 1 // i.e. the shadow has to be offset in some way
+                  },
+                  // Android
+                  shadowOffset: {
+                    width: 0, // Same rules apply from above
+                    height: 1 // Can't both be 0
+                  }
+                }}
+              />
+            </View>
+          </TouchableOpacity>
+        </MapboxGL.PointAnnotation>
       )
     })
 
