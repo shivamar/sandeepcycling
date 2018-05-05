@@ -147,6 +147,7 @@ class Main extends Component {
           animated={true}
           zoomLevel={12}
           pitchEnabled={false}
+          rotateEnabled={false}
           showUserLocation={true}
           centerCoordinate={[-75.552104, 39.756706]}
           onRegionDidChange={() => {

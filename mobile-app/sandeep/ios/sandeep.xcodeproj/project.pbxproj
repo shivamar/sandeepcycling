@@ -5,7 +5,6 @@
 	};
 	objectVersion = 46;
 	objects = {
-
 /* Begin PBXBuildFile section */
 		00C302E51ABCBA2D00DB3ED1 /* libRCTActionSheet.a in Frameworks */ = {isa = PBXBuildFile; fileRef = 00C302AC1ABCB8CE00DB3ED1 /* libRCTActionSheet.a */; };
 		00C302E71ABCBA2D00DB3ED1 /* libRCTGeolocation.a in Frameworks */ = {isa = PBXBuildFile; fileRef = 00C302BA1ABCB90400DB3ED1 /* libRCTGeolocation.a */; };
@@ -50,7 +49,6 @@
 		ADBDB9381DFEBF1600ED6528 /* libRCTBlob.a in Frameworks */ = {isa = PBXBuildFile; fileRef = ADBDB9271DFEBF0700ED6528 /* libRCTBlob.a */; };
 		D69DE82FCA954D489E810727 /* Ionicons.ttf in Resources */ = {isa = PBXBuildFile; fileRef = 6DD510F8EE024F88A5B68F6C /* Ionicons.ttf */; };
 		D781B4ED37784BA1A9F081F5 /* Feather.ttf in Resources */ = {isa = PBXBuildFile; fileRef = C40153C33F934A45A84D8F83 /* Feather.ttf */; };
-		D9837ACA209CFBAE00DD9783 /* GoogleService-Info.plist in Resources */ = {isa = PBXBuildFile; fileRef = D9837AA3209CFBAE00DD9783 /* GoogleService-Info.plist */; };
 		ED9C574E7BCF43A7BCCB1E73 /* Entypo.ttf in Resources */ = {isa = PBXBuildFile; fileRef = 2EA252128D514DF0B6D5445C /* Entypo.ttf */; };
 /* End PBXBuildFile section */
 
@@ -379,7 +377,6 @@
 		C40153C33F934A45A84D8F83 /* Feather.ttf */ = {isa = PBXFileReference; explicitFileType = undefined; fileEncoding = 9; includeInIndex = 0; lastKnownFileType = unknown; name = Feather.ttf; path = "../node_modules/react-native-vector-icons/Fonts/Feather.ttf"; sourceTree = "<group>"; };
 		C5DEBBF689E44B24974BB606 /* libRNFirebase.a */ = {isa = PBXFileReference; explicitFileType = undefined; fileEncoding = 9; includeInIndex = 0; lastKnownFileType = archive.ar; path = libRNFirebase.a; sourceTree = "<group>"; };
 		CF41D4788D3DD49EDAF698F0 /* Pods-sandeep.debug.xcconfig */ = {isa = PBXFileReference; includeInIndex = 1; lastKnownFileType = text.xcconfig; name = "Pods-sandeep.debug.xcconfig"; path = "Pods/Target Support Files/Pods-sandeep/Pods-sandeep.debug.xcconfig"; sourceTree = "<group>"; };
-		D9837AA3209CFBAE00DD9783 /* GoogleService-Info.plist */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = text.plist.xml; path = "GoogleService-Info.plist"; sourceTree = "<group>"; };
 		F602D3705CDC41D4A6138AF7 /* Foundation.ttf */ = {isa = PBXFileReference; explicitFileType = undefined; fileEncoding = 9; includeInIndex = 0; lastKnownFileType = unknown; name = Foundation.ttf; path = "../node_modules/react-native-vector-icons/Fonts/Foundation.ttf"; sourceTree = "<group>"; };
 /* End PBXFileReference section */
 
@@ -522,7 +519,6 @@
 		13B07FAE1A68108700A75B9A /* sandeep */ = {
 			isa = PBXGroup;
 			children = (
-				D9837AA3209CFBAE00DD9783 /* GoogleService-Info.plist */,
 				008F07F21AC5B25A0029DE68 /* main.jsbundle */,
 				13B07FAF1A68108700A75B9A /* AppDelegate.h */,
 				13B07FB01A68108700A75B9A /* AppDelegate.m */,
@@ -1169,7 +1165,6 @@
 				8F0E465165A84CD495A3F38E /* Octicons.ttf in Resources */,
 				22EC8E41BB2443328C6DFD7A /* SimpleLineIcons.ttf in Resources */,
 				05E57F3C23CD488981CF47E9 /* Zocial.ttf in Resources */,
-				D9837ACA209CFBAE00DD9783 /* GoogleService-Info.plist in Resources */,
 			);
 			runOnlyForDeploymentPostprocessing = 0;
 		};

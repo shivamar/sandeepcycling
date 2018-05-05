@@ -53,7 +53,8 @@ class EventCarousel extends Component {
           style={{ flex: 1, height: 218 }}
           contentContainerStyle={{
             justifyContent: 'center',
-            alignItems: 'center'
+            alignItems: 'center',
+            paddingHorizontal: 8
           }}
           showsHorizontalScrollIndicator={false}
           horizontal

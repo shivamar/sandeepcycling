@@ -36,7 +36,5 @@ target 'sandeep' do
 
   pod 'RNVectorIcons', :path => '../node_modules/react-native-vector-icons'
 
-  pod 'Firebase/Core'
-
 
 end
