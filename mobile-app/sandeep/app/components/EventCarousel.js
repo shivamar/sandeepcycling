@@ -1,10 +1,28 @@
 import React, { Component } from 'react'
 import { View, FlatList, Text, Dimensions, StyleSheet } from 'react-native'
 import Icon from 'react-native-vector-icons/MaterialIcons'
+import * as firebase from 'firebase'
 
 const { width } = Dimensions.get('window')
 
 class EventCarousel extends Component {
+  state = { events: null, loading: true }
+  componentDidMount() {
+    const ref = firebase.database().ref('/events')
+    const data = ref
+      .orderByChild('Park')
+      .equalTo('First State Heritage Park')
+      .on('value', snapshot => {
+        console.log(snapshot.val())
+      })
+    // const events = await firebase
+    //   .database()
+    //   .ref()
+    //   .child('events')
+    // const query = events
+    //   .orderByChild('Park')
+    //   .equalTo('First State Heritage Park')
+  }
   renderCard = item => {
     return (
       <View style={styles.card}>
