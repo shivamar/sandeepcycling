@@ -20,7 +20,7 @@ import { ArcGIS } from '../ArcGIS'
 import { getFeaturesWhere } from '../actions/apiRequests'
 
 const HEADER_MAX_HEIGHT = 400
-const HEADER_MIN_HEIGHT = Platform.OS === 'ios' ? 72 : 82
+const HEADER_MIN_HEIGHT = Platform.OS === 'ios' ? 72 : 72
 const HEADER_SCROLL_DISTANCE = HEADER_MAX_HEIGHT - HEADER_MIN_HEIGHT
 
 class ParkDetail extends Component {
@@ -110,7 +110,7 @@ class ParkDetail extends Component {
               this.state.park.lat
             },${
               this.state.park.long
-            },15,0.00,0.00/1000x1000@2x?access_token=pk.eyJ1IjoiYXdvb2RhbGwiLCJhIjoiY2pnZnJyYjB6MDRqdTMzbzVzbXUzNnowdCJ9.Iv9Ya7fRrQShET_iMEwWMw`
+            },16,0.00,0.00/1000x1000@2x?access_token=pk.eyJ1IjoiYXdvb2RhbGwiLCJhIjoiY2pnZnJyYjB6MDRqdTMzbzVzbXUzNnowdCJ9.Iv9Ya7fRrQShET_iMEwWMw`
           }}
         />
         <Animated.Image

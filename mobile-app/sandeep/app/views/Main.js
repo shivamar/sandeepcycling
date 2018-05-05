@@ -135,7 +135,6 @@ class Main extends Component {
         <MapboxGL.PointAnnotation
           id={`${feature.id}`}
           key={feature.id}
-          title={feature.properties.NAME}
           coordinate={[coords.latitude, coords.longitude]}
           onSelected={() => {
             let obj = feature
@@ -230,6 +229,7 @@ class Main extends Component {
               },
               shadowRadius: 4,
               shadowOpacity: 0.25,
+              elevation: 6,
               height: 50,
               width: 50,
               justifyContent: 'center',
