@@ -1,4 +1,4 @@
-#Explore Delaware
+# Explore Delaware
 
 A cross platform mobile app allowing users to navigate Delaware's numerous natural resources in a convenient and portable manner.
 
@@ -23,6 +23,12 @@ Once you have Yarn set up, you need to:
 ```
 git clone https://github.com/grivasjon/sandeepcycling
 ```
+
+as well as:
+```
+npm install -g react-native-cli
+```
+
 and navigate on your terminal or command line to the directory containing `package.json` ( /sandeepcycling/mobile-app/sandeep ).
 Once there, run:
 ```
@@ -41,7 +47,7 @@ react-native run-ios
 which will kick off the build process and eventually get the app running on your system.
 
 
-#Note:
+### Note:
 React Native Debugger is a great tool for debugging and replaying the state of this app:
 [https://github.com/jhen0409/react-native-debugger](https://github.com/jhen0409/react-native-debugger)
 
